@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+<<<<<<< HEAD:Assets/script/PathFinding.cs.meta
+guid: 611110d833e8f194fa1e6656eed5b910
+=======
+guid: 476cc7d7cd9874016adc216baab94a0a
+timeCreated: 1484146680
+licenseType: Store
+>>>>>>> 67e16c645bb93ce464e22c439c7853cc59b6f150:BoingBouncy/Assets/TutorialInfo/Scripts/Editor/ReadmeEditor.cs.meta
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
