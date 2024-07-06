@@ -63,6 +63,7 @@
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\script\BallMovement.cs" />
     <Compile Include="Assets\script\CameraZoom.cs" />
+    <Compile Include="Assets\script\Volume Setting.cs" />
     <Compile Include="Assets\script\MenuController.cs" />
   </ItemGroup>
   <ItemGroup>
