@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathFinding : MonoBehaviour
+public class Pathfinding : MonoBehaviour
 {
     [SerializeField] Vector2Int startCords;
     public Vector2Int StartCords { get { return startCords; } }
@@ -22,19 +22,20 @@ public class PathFinding : MonoBehaviour
 
     Vector2Int[] searchOrder = {Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down};
 
+
     private void Awake()
     {
         gridManager = FindObjectOfType<GridManager>();
-        if(gridManager != null )
+        if(gridManager != null)
         {
             grid = gridManager.Grid;
         }
     }
-
     public List<Node> GetNewPath()
     {
         return GetNewPath(startCords);
     }
+
     public List<Node> GetNewPath(Vector2Int coordinates)
     {
         gridManager.ResetNodes();
@@ -56,29 +57,30 @@ public class PathFinding : MonoBehaviour
         frontier.Enqueue(grid[coordinates]);
         reached.Add(coordinates, grid[coordinates]);
 
-        while (frontier.Count > 0 && isRunning == true) 
+        while (frontier.Count > 0 && isRunning == true)
         {
             currentNode = frontier.Dequeue();
             currentNode.explored = true;
             ExploreNeighbors();
-            if(currentNode.cords == targetCords)
+            if (currentNode.cords == targetCords)
             {
                 isRunning = false;
+                currentNode.walkable = false;
             }
         }
     }
 
-    void ExploreNeighbors ()
+    void ExploreNeighbors()
     {
         List<Node> neighbors = new List<Node>();
 
         foreach (Vector2Int direction in searchOrder)
         {
-            Vector2Int neighborsCords = currentNode.cords + direction;
+            Vector2Int neighborCords = currentNode.cords + direction;
 
-            if (grid.ContainsKey(neighborsCords))
+            if (grid.ContainsKey(neighborCords))
             {
-                neighbors.Add(grid[neighborsCords]);
+                neighbors.Add(grid[neighborCords]);
             }
         }
 
@@ -89,7 +91,6 @@ public class PathFinding : MonoBehaviour
                 neighbor.connectTo = currentNode;
                 reached.Add(neighbor.cords, neighbor);
                 frontier.Enqueue(neighbor);
-
             }
         }
     }
@@ -106,18 +107,20 @@ public class PathFinding : MonoBehaviour
         {
             currentNode = currentNode.connectTo;
             path.Add(currentNode);
-            currentNode.path = false;
+            currentNode.path = true;
         }
+
         path.Reverse();
         return path;
     }
+
 
     public void NotifyReceievers()
     {
         BroadcastMessage("RecalculatePath", false, SendMessageOptions.DontRequireReceiver);
     }
 
-    public void SetNewDestination (Vector2Int startCoordinates, Vector2Int targetCoordinates)
+    public void SetNewDestination(Vector2Int startCoordinates, Vector2Int targetCoordinates)
     {
         startCords = startCoordinates;
         targetCords = targetCoordinates;
