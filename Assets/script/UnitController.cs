@@ -12,31 +12,34 @@ public class UnitController : MonoBehaviour
     List<Node> path = new List<Node>();
 
     GridManager gridManager;
-    PathFinding pathFinder; 
+    Pathfinding pathFinder;
 
     void Start()
     {
         gridManager = FindObjectOfType<GridManager>();
-        pathFinder = FindObjectOfType<PathFinding>();
+        pathFinder = FindObjectOfType<Pathfinding>();
     }
 
+    // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) { 
-        
+        if (Input.GetMouseButtonDown(0))
+        {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             bool hasHit = Physics.Raycast(ray, out hit);
 
+
+
             if (hasHit)
             {
-                if (hit.transform.tag == "tile") 
+                if (hit.transform.tag == "tile")
                 {
                     if (unitSelected)
                     {
                         Vector2Int targetCords = hit.transform.GetComponent<Tile>().cords;
-                        Vector2Int startCords = new Vector2Int((int)selectedUnit.position.x, (int)selectedUnit.position.y) / gridManager.UnityGridSize;
+                        Vector2Int startCords = new Vector2Int((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.z) / gridManager.UnityGridSize;
                         pathFinder.SetNewDestination(startCords, targetCords);
                         RecalculatePath(true);
                     }
@@ -47,7 +50,6 @@ public class UnitController : MonoBehaviour
                     unitSelected = true;
                 }
             }
-        
         }
     }
 
@@ -70,10 +72,13 @@ public class UnitController : MonoBehaviour
 
     IEnumerator FollowPath()
     {
-        for(int i = 1; i < path.Count; i++)
+        for (int i = 1; i < path.Count; i++)
         {
-            Vector3 startPosisition = selectedUnit.position;
-            Vector3 endPosition = gridManager.GetPositionFromCoordinatess(path[i].cords);
+            Vector3 startPosition = selectedUnit.position;
+            Vector3 endPosition = gridManager.GetPositionFromCoordinates(path[i].cords);
+
+            endPosition.y = startPosition.y;
+
             float travelPercent = 0f;
 
             selectedUnit.LookAt(endPosition);
@@ -81,9 +86,10 @@ public class UnitController : MonoBehaviour
             while (travelPercent < 1f)
             {
                 travelPercent += Time.deltaTime * movementSpeed;
-                selectedUnit.position = Vector3.Lerp(startPosisition, endPosition, travelPercent);
+                selectedUnit.position = Vector3.Lerp(startPosition, endPosition, travelPercent);
                 yield return new WaitForEndOfFrame();
             }
+
         }
     }
 }

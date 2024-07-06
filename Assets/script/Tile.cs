@@ -4,11 +4,24 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    [SerializeField] bool blocked;
+
     public Vector2Int cords;
 
     GridManager gridManager;
 
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
+    {
+        SetCords();
+
+        if(blocked)
+        {
+            gridManager.BlockNode(cords);
+        }
+    }
+
+    private void SetCords()
     {
         gridManager = FindObjectOfType<GridManager>();
         int x = (int)transform.position.x;
