@@ -22,6 +22,7 @@ public class GridManager : MonoBehaviour
         {
             return grid[coordinates];
         }
+
         return null;
     }
 
@@ -53,16 +54,15 @@ public class GridManager : MonoBehaviour
         return coordinates;
     }
 
-    public Vector3 GetPositionFromCoordinatess(Vector2Int coordinates)
+    public Vector3 GetPositionFromCoordinates(Vector2Int coordinates)
     {
         Vector3 position = new Vector3();
 
         position.x = coordinates.x * unityGridSize;
-        position.y = coordinates.y * unityGridSize;
+        position.z = coordinates.y * unityGridSize;
 
         return position;
     }
-
     private void CreateGrid()
     {
         for (int x = 0; x < gridSize.x; x++)
@@ -72,10 +72,10 @@ public class GridManager : MonoBehaviour
                 Vector2Int cords = new Vector2Int(x, y);
                 grid.Add(cords, new Node(cords, true));
 
-                /*GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                Vector3 position = new Vector3(cords.x * unityGridSize, 0f, cords.y * unityGridSize);
-                cube.transform.position = position;
-                cube.transform.SetParent(transform);*/
+                //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                //Vector3 position = new Vector3(cords.x * unityGridSize, 0f, cords.y * unityGridSize);
+                //cube.transform.position = position;
+                //cube.transform.SetParent(transform);
             }
         }
     }

@@ -320,9 +320,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5844082353945552244}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9aaf09b6ee2881d498745d74d390ef16, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e46db5b82afa914db25fc38e8bbae35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blocked: 0
   cords: {x: 0, y: 0}
 --- !u!114 &5001095089353482323
 MonoBehaviour:
@@ -333,7 +334,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5844082353945552244}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81c1b7f903a43144e9e62be20a79e3a8, type: 3}
+  m_Script: {fileID: 11500000, guid: a3b691dc3aa30934cb3ed0aeb555f7a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cords: {x: 0, y: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  blockedColor: {r: 1, g: 0, b: 0, a: 1}
+  exploredColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  pathColor: {r: 1, g: 0.5, b: 0, a: 1}
