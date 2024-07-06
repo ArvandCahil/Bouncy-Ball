@@ -76,6 +76,9 @@ public class UnitController : MonoBehaviour
         {
             Vector3 startPosition = selectedUnit.position;
             Vector3 endPosition = gridManager.GetPositionFromCoordinates(path[i].cords);
+
+            endPosition.y = startPosition.y;
+
             float travelPercent = 0f;
 
             selectedUnit.LookAt(endPosition);
