@@ -68,12 +68,15 @@
     <Compile Include="Assets\script\SplashScreenController.cs" />
     <Compile Include="Assets\script\GridManager.cs" />
     <Compile Include="Assets\script\SplashTranstitiom.cs" />
+    <Compile Include="Assets\script\labeler.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\script\Labeller.cs" />
     <Compile Include="Assets\script\PathFinding.cs" />
     <Compile Include="Assets\script\Node.cs" />
     <Compile Include="Assets\script\CameraZoom.cs" />
     <Compile Include="Assets\script\Volume Setting.cs" />
+    <Compile Include="Assets\script\MenuController.cs" />
+    <Compile Include="Assets\script\BallMovementController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
