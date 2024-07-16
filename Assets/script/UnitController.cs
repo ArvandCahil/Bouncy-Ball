@@ -48,6 +48,7 @@ public class UnitController : MonoBehaviour
                 {
                     selectedUnit = hit.transform;
                     unitSelected = true;
+                    Debug.Log(" unit was clicked ");
                 }
             }
         }
