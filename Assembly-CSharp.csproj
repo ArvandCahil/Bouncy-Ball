@@ -66,6 +66,7 @@
     <Compile Include="Assets\script\SplashTranstitiom.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\script\Labeller.cs" />
+    <Compile Include="Assets\script\NavButton.cs" />
     <Compile Include="Assets\script\PathFinding.cs" />
     <Compile Include="Assets\script\Node.cs" />
     <Compile Include="Assets\script\CameraZoom.cs" />
