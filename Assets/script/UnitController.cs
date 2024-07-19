@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -75,30 +76,24 @@ public class UnitController : MonoBehaviour
     {
         for (int i = 1; i < path.Count; i++)
         {
-            Vector3 startPosition = selectedUnit.position;
+            // Get the target position from the path
             Vector3 endPosition = gridManager.GetPositionFromCoordinates(path[i].cords);
 
-            //endPosition.y = startPosition.y;
+            // Rotate the unit to face the target position
+            selectedUnit.LookAt(new Vector3(endPosition.x, selectedUnit.position.y, endPosition.z));
 
-            float travelPercent = 0f;
+            // Calculate travel time based on movement speed
+            float travelTime = Vector3.Distance(selectedUnit.position, endPosition) / movementSpeed;
 
-            selectedUnit.LookAt(endPosition);
+            // Create tweens to move the unit's x and z coordinates while keeping y position
+            Tween moveXTween = selectedUnit.DOMoveX(endPosition.x, travelTime).SetEase(Ease.Linear);
+            Tween moveZTween = selectedUnit.DOMoveZ(endPosition.z, travelTime).SetEase(Ease.Linear);
 
-            while (travelPercent < 1f)
-            {
-                travelPercent += Time.deltaTime * movementSpeed;
+            // Wait for both tweens to complete
+            yield return DOTween.Sequence().Join(moveXTween).Join(moveZTween).WaitForCompletion();
 
-                float newX = Mathf.Lerp(startPosition.x, endPosition.x, travelPercent);
-                float newY = Mathf.Lerp(startPosition.y, endPosition.y, travelPercent);
-                float newZ = Mathf.Lerp(startPosition.z, endPosition.z, travelPercent);
-
-                selectedUnit.position = new Vector3(newX, newY, newZ);
-                yield return new WaitForEndOfFrame();
-            }
-
-           // Debug.Log(startPosition);
             Debug.Log(endPosition);
-
         }
     }
+
 }
