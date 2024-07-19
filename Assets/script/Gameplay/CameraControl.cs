@@ -12,6 +12,9 @@ public class CameraControl : MonoBehaviour
     public float mouseMoveThreshold = 1f; // Threshold untuk mendeteksi pergerakan mouse
     public float cameraSensitivity = 300f; // Sensitivitas kamera
 
+    [SerializeField]
+    private bool isCameraModeActive = false; // Checkbox untuk mode kamera aktif (disertakan di Inspector)
+
     private bool isCameraMode = false;
     private Vector3 lastMousePosition;
 
@@ -72,6 +75,7 @@ public class CameraControl : MonoBehaviour
                 // Gerakkan kamera
                 freeLookCamera.m_XAxis.m_MaxSpeed = cameraSensitivity;  // Gunakan sensitivitas kamera yang diatur
                 freeLookCamera.m_YAxis.m_MaxSpeed = cameraSensitivity / 150f;  // Sesuaikan kecepatan rotasi sesuai kebutuhanmu
+                isCameraModeActive = true; // Centang checkbox saat mode kamera aktif
             }
         }
         else
@@ -81,6 +85,7 @@ public class CameraControl : MonoBehaviour
                 // Tampilkan kursor saat tombol mouse kiri dilepas (PC/laptop)
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+                isCameraModeActive = false; // Uncentang checkbox saat mode kamera tidak aktif
             }
 
             // Nonaktifkan gerakan kamera
