@@ -78,7 +78,7 @@ public class UnitController : MonoBehaviour
             Vector3 startPosition = selectedUnit.position;
             Vector3 endPosition = gridManager.GetPositionFromCoordinates(path[i].cords);
 
-            endPosition.y = startPosition.y;
+            //endPosition.y = startPosition.y;
 
             float travelPercent = 0f;
 
@@ -87,9 +87,17 @@ public class UnitController : MonoBehaviour
             while (travelPercent < 1f)
             {
                 travelPercent += Time.deltaTime * movementSpeed;
-                selectedUnit.position = Vector3.Lerp(startPosition, endPosition, travelPercent);
+
+                float newX = Mathf.Lerp(startPosition.x, endPosition.x, travelPercent);
+                float newY = Mathf.Lerp(startPosition.y, endPosition.y, travelPercent);
+                float newZ = Mathf.Lerp(startPosition.z, endPosition.z, travelPercent);
+
+                selectedUnit.position = new Vector3(newX, newY, newZ);
                 yield return new WaitForEndOfFrame();
             }
+
+           // Debug.Log(startPosition);
+            Debug.Log(endPosition);
 
         }
     }
