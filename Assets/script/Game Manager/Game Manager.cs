@@ -6,60 +6,29 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class generalManager : MonoBehaviour
 {
-    public static GameManager current;
-    private playerInformation playerInfo;
+    public static generalManager instance;
+    private playerInformation playerInformation;
 
     private void Start()
     {
-        if (current != null)
+        if (instance != null)
         {
-            current = this;
-        }
-            
-    }
-
-    public class currencyManager
-    {
-        public bool Star(int amount)
-        {
-            if(current.playerInfo.currency.star >= amount) 
-            {
-                current.playerInfo.currency.star -= amount;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
 
-    public class inventoryManager
+    public class currency
     {
-        public bool addItem(int id)
+        public class star
         {
-            if(!current.playerInfo.inventory.ownedBallId.Contains(id))
+            public bool spend(int amount)
             {
-                current.playerInfo.inventory.ownedBallId.Append(id);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            
-        }
-
-        public bool removeItem(int id)
-        {
-            for(int i = 0; i < current.playerInfo.inventory.ownedBallId.Length; i++)
-            {
-                if (current.playerInfo.inventory.ownedBallId[i] == id)
+                if (instance.playerInformation.currency.star >= amount)
                 {
-                    current.playerInfo.inventory.ownedBallId = RemoveAt(current.playerInfo.inventory.ownedBallId, id);
+                    instance.playerInformation.currency.star -= amount;
                     return true;
                 }
                 else
@@ -67,23 +36,74 @@ public class GameManager : MonoBehaviour
                     return false;
                 }
             }
-            return false;
-            
+
+            public bool add(int amount) 
+            {
+                if (instance.playerInformation.currency.star >= amount)
+                {
+                    instance.playerInformation.currency.star += amount;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
-        public bool equipitem(int id)
+    }
+
+    public class inventory
+    {
+        public class skin
         {
-            if (current.playerInfo.inventory.ownedBallId.Contains(id))
+            public bool addItem(int id)
             {
+                if (!instance.playerInformation.inventory.ownedSkinID.Contains(id))
+                {
+                    instance.playerInformation.inventory.ownedSkinID.Append(id);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
 
             }
-            else
+
+            public bool removeItem(int id)
             {
+                for (int i = 0; i < instance.playerInformation.inventory.ownedSkinID.Length; i++)
+                {
+                    if (instance.playerInformation.inventory.ownedSkinID[i] == id)
+                    {
+                        instance.playerInformation.inventory.ownedSkinID = RemoveAt(instance.playerInformation.inventory.ownedSkinID, id);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
                 return false;
+
+            }
+
+            public bool equipitem(int id)
+            {
+                if (instance.playerInformation.inventory.ownedSkinID.Contains(id))
+                {
+                    instance.playerInformation.inventory.equippedSkinID = id;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
-        public static T[] RemoveAt<T>(T[] source, int index)
+        private static T[] RemoveAt<T>(T[] source, int index)
         {
             if (index < 0 || index >= source.Length)
             {
@@ -109,11 +129,16 @@ public class GameManager : MonoBehaviour
     {
         public void save()
         {
-            string json = JsonUtility.ToJson(current.playerInfo);
+            string json = JsonUtility.ToJson(instance.playerInformation);
+            string path = Application.persistentDataPath + "/" + instance.playerInformation.profile.name;
+            StreamWriter writer = new StreamWriter(path);
+            writer.Write(json);
         }
         public void load() 
-        { 
-        
+        {
+            string path = Application.persistentDataPath + "/" + instance.playerInformation.profile.name;
+            StreamReader reader = new StreamReader(path);
+            instance.playerInformation = JsonUtility.FromJson<playerInformation>(reader.ReadToEnd());
         }
     }
 }

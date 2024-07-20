@@ -2,15 +2,14 @@ using UnityEngine.UI;
 
 public class playerInformation
 {
-    public playerData playerData;
+    public profile profile;
     public currency currency;
-    public playerInventory inventory;
-
+    public inventory inventory;
 }
 
-public class playerData 
+public class profile 
 {
-    public string playerName;
+    public string name;
 }
 
 public class currency
@@ -18,21 +17,34 @@ public class currency
     public int star;
 }
 
-public class playerInventory
+public class inventory
 {
-    public int equippedBallId;
-    public int[] ownedBallId;
+    public int equippedSkinID;
+    public int[] ownedSkinID;
 }
 
-public class ball_Information
+public class skinInformation
 {
-    public ball[] balls;
+    public skin[] skins;
 }
 
-public class ball 
+public class skin 
 { 
     public string name;
     public string description;
-    public int id;
+    public int ID;
     public Image ballImage;
+}
+
+public enum graphic
+{
+    low,
+    medium,
+    high
+}
+
+public class setting
+{
+    public float volume;
+    public graphic graphic;
 }

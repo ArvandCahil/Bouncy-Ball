@@ -6,7 +6,7 @@ public class BallManager : MonoBehaviour
 {
     public static BallManager instance;
 
-    public ball_Information ball_Information;
+    public skinInformation ball_Information;
 
     private void Start()
     {
@@ -16,11 +16,11 @@ public class BallManager : MonoBehaviour
         }
     }
 
-    public ball get_information(int id) 
+    public skin get_information(int id) 
     {
-        foreach(ball obj in ball_Information.balls)
+        foreach(skin obj in ball_Information.skins)
         {
-            if (obj.id == id)
+            if (obj.ID == id)
             {
                 return obj;
             }
