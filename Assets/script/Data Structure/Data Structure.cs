@@ -20,6 +20,7 @@ public class currency
 
 public class playerInventory
 {
+    public int equippedBallId;
     public int[] ownedBallId;
 }
 
