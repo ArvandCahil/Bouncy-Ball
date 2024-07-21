@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallManager : MonoBehaviour
+public class skinManager : MonoBehaviour
 {
-    public static BallManager instance;
+    public static skinManager instance;
 
-    public skinInformation ball_Information;
+    [SerializeField] public skinInformation skinInformation;
 
     private void Start()
     {
@@ -18,7 +18,7 @@ public class BallManager : MonoBehaviour
 
     public skin get_information(int id) 
     {
-        foreach(skin obj in ball_Information.skins)
+        foreach(skin obj in skinInformation.skins)
         {
             if (obj.ID == id)
             {

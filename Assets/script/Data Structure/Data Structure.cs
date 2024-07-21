@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class playerInformation
@@ -23,9 +24,15 @@ public class inventory
     public int[] ownedSkinID;
 }
 
+[System.Serializable]
 public class skinInformation
 {
-    public skin[] skins;
+    public List<skin> skins;
+
+    public skinInformation()
+    {
+        skins = new List<skin>();
+    }
 }
 
 public class skin 
