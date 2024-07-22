@@ -23530,6 +23530,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 10
+  maxMoves: 10
+  movementBoundsMin: {x: -10, y: -10}
+  movementBoundsMax: {x: 10, y: 10}
 --- !u!135 &2026979716
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -25233,10 +25236,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ball
       objectReference: {fileID: 0}
+    - target: {fileID: 4535984359615070015, guid: d4cffccd323f62949887e6473155a848,
+        type: 3}
+      propertyPath: maxMoves
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4535984359615070015, guid: d4cffccd323f62949887e6473155a848,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6094272444067596682, guid: d4cffccd323f62949887e6473155a848,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 6094272444067596682, guid: d4cffccd323f62949887e6473155a848,
         type: 3}
@@ -25283,7 +25296,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4535984359615070015, guid: d4cffccd323f62949887e6473155a848, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

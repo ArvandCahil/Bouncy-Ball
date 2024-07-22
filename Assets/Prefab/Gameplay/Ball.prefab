@@ -147,3 +147,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 3
+  maxMoves: 3
+  movementBoundsMin: {x: -10, y: -10}
+  movementBoundsMax: {x: 10, y: 10}

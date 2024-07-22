@@ -6,6 +6,10 @@ using UnityEngine;
 public class UnitController : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 1f;
+    [SerializeField] int maxMoves; // Set the maximum number of moves allowed
+
+    [SerializeField] Vector2Int movementBoundsMin = new Vector2Int(-10, -10);
+    [SerializeField] Vector2Int movementBoundsMax = new Vector2Int(10, 10);
 
     Transform selectedUnit;
     bool unitSelected = false;
@@ -15,10 +19,14 @@ public class UnitController : MonoBehaviour
     GridManager gridManager;
     Pathfinding pathFinder;
 
+    int moveCount = 0; // Track the number of moves made
+
     void Start()
     {
         gridManager = FindObjectOfType<GridManager>();
         pathFinder = FindObjectOfType<Pathfinding>();
+        Debug.Log($"Max Moves: {maxMoves}");
+        Debug.Log(gameObject.name);
     }
 
     // Update is called once per frame
@@ -41,25 +49,40 @@ public class UnitController : MonoBehaviour
 
             bool hasHit = Physics.Raycast(ray, out hit);
 
-
-
             if (hasHit)
             {
-                if (hit.transform.tag == "tile")
+                if (hit.transform.CompareTag("tile"))
                 {
                     if (unitSelected)
                     {
                         Vector2Int targetCords = hit.transform.GetComponent<Tile>().cords;
                         Vector2Int startCords = new Vector2Int((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.z) / gridManager.UnityGridSize;
-                        pathFinder.SetNewDestination(startCords, targetCords);
-                        RecalculatePath(true);
+
+                        // Check if the target position is within bounds
+                        if (IsWithinBounds(targetCords))
+                        {
+                            if (moveCount < maxMoves)
+                            {
+                                pathFinder.SetNewDestination(startCords, targetCords);
+                                RecalculatePath(true);
+                                moveCount++;
+                            }
+                            else
+                            {
+                                Debug.Log("Move limit reached. No further movements allowed.");
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("Target is out of bounds.");
+                        }
                     }
                 }
-                if (hit.transform.tag == "unit")
+                else if (hit.transform.CompareTag("unit"))
                 {
                     selectedUnit = hit.transform;
                     unitSelected = true;
-                    Debug.Log(" unit was clicked ");
+                    Debug.Log("Unit was clicked.");
                 }
             }
         }
@@ -67,7 +90,7 @@ public class UnitController : MonoBehaviour
 
     void RecalculatePath(bool resetPath)
     {
-        Vector2Int coordinates = new Vector2Int();
+        Vector2Int coordinates;
         if (resetPath)
         {
             coordinates = pathFinder.StartCords;
@@ -76,6 +99,7 @@ public class UnitController : MonoBehaviour
         {
             coordinates = gridManager.GetCoordinatesFromPosition(transform.position);
         }
+
         StopAllCoroutines();
         path.Clear();
         path = pathFinder.GetNewPath(coordinates);
@@ -106,4 +130,9 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    bool IsWithinBounds(Vector2Int position)
+    {
+        return position.x >= movementBoundsMin.x && position.x <= movementBoundsMax.x &&
+               position.y >= movementBoundsMin.y && position.y <= movementBoundsMax.y;
+    }
 }
