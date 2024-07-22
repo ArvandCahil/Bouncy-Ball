@@ -67,7 +67,7 @@
     <Compile Include="Assets\script\UI\Main Menu\SplashScreenController.cs" />
     <Compile Include="Assets\script\Game Manager\Ball Manager.cs" />
     <Compile Include="Assets\script\Gameplay\CameraControl.cs" />
-    <Compile Include="Assets\script\Environment\Skybox Rotator.cs" />
+    <Compile Include="Assets\script\Environment\Main Menu\Skybox Rotator.cs" />
     <Compile Include="Assets\script\UI\Main Menu\Labeller.cs" />
     <Compile Include="Assets\script\UI\Main Menu\MenuController.cs" />
     <Compile Include="Assets\script\Gameplay\UnitController.cs" />

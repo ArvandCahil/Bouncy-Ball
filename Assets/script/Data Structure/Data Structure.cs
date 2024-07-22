@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class playerInformation
@@ -18,6 +20,7 @@ public class currency
     public int star;
 }
 
+[System.Serializable]
 public class inventory
 {
     public int equippedSkinID;
@@ -35,12 +38,14 @@ public class skinInformation
     }
 }
 
+[System.Serializable]
 public class skin 
 { 
     public string name;
     public string description;
     public int ID;
     public Image ballImage;
+    public Material material;
 }
 
 public enum graphic

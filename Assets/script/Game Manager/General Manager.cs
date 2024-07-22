@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -20,15 +21,22 @@ public class generalManager : MonoBehaviour
         }
     }
 
-    public class currency
+    private void newPlayer()
     {
-        public class star
+        
+
+    }
+
+    public static class currency
+    {
+        public static class star
         {
-            public bool spend(int amount)
+            public static bool spend(int amount)
             {
                 if (instance.playerInformation.currency.star >= amount)
                 {
                     instance.playerInformation.currency.star -= amount;
+                    refresh();
                     return true;
                 }
                 else
@@ -37,17 +45,23 @@ public class generalManager : MonoBehaviour
                 }
             }
 
-            public bool add(int amount) 
+            public static bool add(int amount) 
             {
                 if (instance.playerInformation.currency.star >= amount)
                 {
                     instance.playerInformation.currency.star += amount;
+                    refresh() ;
                     return true;
                 }
                 else
                 {
                     return false;
                 }
+            }
+            public static void refresh()
+            {
+                TextMeshProUGUI starText = GameObject.FindGameObjectWithTag("Star").GetComponent<TextMeshProUGUI>();
+                starText.text = instance.playerInformation.currency.star.ToString();
             }
         }
 
@@ -139,6 +153,7 @@ public class generalManager : MonoBehaviour
             string path = Application.persistentDataPath + "/" + instance.playerInformation.profile.name;
             StreamReader reader = new StreamReader(path);
             instance.playerInformation = JsonUtility.FromJson<playerInformation>(reader.ReadToEnd());
+            generalManager.currency.star.refresh();
         }
     }
 }

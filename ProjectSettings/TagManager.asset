@@ -6,6 +6,7 @@ TagManager:
   tags:
   - tile
   - unit
+  - Star
   layers:
   - Default
   - TransparentFX

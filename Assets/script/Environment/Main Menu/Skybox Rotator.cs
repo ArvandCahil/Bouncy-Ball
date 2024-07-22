@@ -13,7 +13,7 @@ public class SkyboxRotator : MonoBehaviour
 
     private void Start()
     {
-        int hour = 12; // DateTime.Now.Hour;
+        int hour = 12;// DateTime.Now.Hour;
         Color color = Color.black;
         Debug.Log(hour);
 
