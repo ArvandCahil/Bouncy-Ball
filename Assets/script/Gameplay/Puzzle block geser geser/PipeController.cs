@@ -3,6 +3,9 @@ using UnityEngine;
 public class PipeController : MonoBehaviour
 {
     [SerializeField] private bool isHorizontal;
+    [SerializeField] private float manualLength; // Panjang manual yang dapat disesuaikan
+    [SerializeField] private Vector3 centerOffset; // Offset untuk menentukan pusat area gerakan
+
     private BoxCollider boxCollider;
 
     private void Awake()
@@ -14,14 +17,27 @@ public class PipeController : MonoBehaviour
 
     public float GetPipeLength()
     {
-        // Menghitung panjang pipa berdasarkan ukuran collider dan skala objek
-        float length = isHorizontal ? boxCollider.size.x : boxCollider.size.y;
-        return length * Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        // Menggunakan panjang manual jika disetel
+        return manualLength;
     }
 
     public Vector3 GetPipeCenter()
     {
-        // Menghitung pusat collider dengan mempertimbangkan skala objek
-        return boxCollider.bounds.center;
+        // Menyesuaikan pusat berdasarkan pivot yang ada di tepi dan offset
+        Vector3 pipeCenter = transform.position + centerOffset;
+
+        // Mengatur pusat berdasarkan orientasi pipa
+        if (isHorizontal)
+        {
+            // Pusat di tengah panjang pipa jika horizontal
+            pipeCenter += new Vector3(GetPipeLength() / 2, 0, 0);
+        }
+        else
+        {
+            // Pusat di tengah panjang pipa jika vertikal
+            pipeCenter += new Vector3(0, GetPipeLength() / 2, 0);
+        }
+
+        return pipeCenter;
     }
 }
