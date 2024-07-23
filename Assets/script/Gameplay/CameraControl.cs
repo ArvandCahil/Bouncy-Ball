@@ -18,73 +18,52 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
-        // Zoom in dan zoom out dengan scroll wheel (PC/laptop)
-        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
-        if (scrollInput != 0f)
+        if (freeLookCamera.enabled)
         {
-            float currentFOV = freeLookCamera.m_Lens.FieldOfView;
-            float newFOV = Mathf.Clamp(currentFOV - scrollInput * zoomSpeed, minFOV, maxFOV);
-            freeLookCamera.m_Lens.FieldOfView = newFOV;
-        }
+            if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
+            {
+                lastMousePosition = Input.mousePosition;
+                isCameraMode = false;
+            }
 
-        // Zoom in dan zoom out dengan pinch gesture (Android)
-        if (Input.touchCount == 2)
-        {
-            Touch touchZero = Input.GetTouch(0);
-            Touch touchOne = Input.GetTouch(1);
+            if (Input.GetMouseButton(0))
+            {
+                Vector3 mouseDelta = Input.mousePosition - lastMousePosition;
 
-            Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-            Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+                if (mouseDelta.magnitude > mouseMoveThreshold)
+                {
+                    isCameraMode = true;
+                }
 
-            float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-            float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+                if (isCameraMode)
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
 
-            float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+                    freeLookCamera.m_XAxis.m_MaxSpeed = cameraSensitivity;
+                    freeLookCamera.m_YAxis.m_MaxSpeed = cameraSensitivity / 150f;
+                    isCameraModeActive = true;
+                }
+            }
+            else
+            {
+                if (isCameraMode)
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                    isCameraModeActive = false;
+                }
 
-            float currentFOV = freeLookCamera.m_Lens.FieldOfView;
-            float newFOV = Mathf.Clamp(currentFOV + deltaMagnitudeDiff * zoomSpeed, minFOV, maxFOV);
-            freeLookCamera.m_Lens.FieldOfView = newFOV;
-        }
+                freeLookCamera.m_XAxis.m_MaxSpeed = 0;
+                freeLookCamera.m_YAxis.m_MaxSpeed = 0;
+            }
 
-        // Aktifkan atau nonaktifkan kontrol kamera berdasarkan input mouse (PC/laptop) atau touch (Android)
-        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
-        {
             lastMousePosition = Input.mousePosition;
-            isCameraMode = false;
         }
+    }
 
-        if (Input.GetMouseButton(0))
-        {
-            Vector3 mouseDelta = Input.mousePosition - lastMousePosition;
-
-            if (mouseDelta.magnitude > mouseMoveThreshold)
-            {
-                isCameraMode = true;
-            }
-
-            if (isCameraMode)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-
-                freeLookCamera.m_XAxis.m_MaxSpeed = cameraSensitivity;
-                freeLookCamera.m_YAxis.m_MaxSpeed = cameraSensitivity / 150f;
-                isCameraModeActive = true;
-            }
-        }
-        else
-        {
-            if (isCameraMode)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-                isCameraModeActive = false;
-            }
-
-            freeLookCamera.m_XAxis.m_MaxSpeed = 0;
-            freeLookCamera.m_YAxis.m_MaxSpeed = 0;
-        }
-
-        lastMousePosition = Input.mousePosition;
+    public void SetCameraActive(bool active)
+    {
+        freeLookCamera.enabled = active;
     }
 }
