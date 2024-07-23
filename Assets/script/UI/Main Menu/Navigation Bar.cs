@@ -136,38 +136,74 @@ public class NavigationBar : MonoBehaviour
         {
             if (targetState == State.home)
             {
-                playObject.SetActive(true);
-                playObject.transform.DOLocalMove(playInitialPosition, 0.5f)
-                    .SetEase(Ease.InOutCubic);
+                StartCoroutine(MovePlayObject(new Vector2(0, 1168.5f), true)); 
             }
             else
             {
-                playObject.transform.DOLocalMove(playInitialPosition - new Vector3(0, 700f, 0), 0.5f)
-                    .SetEase(Ease.InOutCubic);
+                StartCoroutine(MovePlayObject(new Vector2(0, 316f), false)); 
             }
         }
+    }
+
+    private IEnumerator MovePlayObject(Vector2 targetPosition, bool activate)
+    {
+        RectTransform playRectTransform = playObject.GetComponent<RectTransform>();
+        Vector2 startPosition = playRectTransform.anchoredPosition;
+        Vector2 endPosition = activate ? new Vector2(playRectTransform.anchoredPosition.x, 1168.5f) : new Vector2(playRectTransform.anchoredPosition.x, 78f);
+        float duration = 0.5f;
+        float elapsedTime = 0;
+
+        if (activate)
+        {
+            playObject.SetActive(true);
+        }
+
+        while (elapsedTime < duration)
+        {
+            playRectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        playRectTransform.anchoredPosition = endPosition;
     }
 
     private void UpdateSlideObject(State targetState)
     {
         if (slideObject != null)
         {
-            RectTransform slideRectTransform = slideObject.GetComponent<RectTransform>();
-            if (slideRectTransform != null)
+            if (targetState == State.inventory)
             {
-                if (targetState == State.inventory)
-                {
-                    slideObject.SetActive(true);
-                    slideRectTransform.DOAnchorPos(new Vector2(slideInitialPosition.x, slideInitialPosition.y + 1000f), 0.5f)
-                        .SetEase(Ease.InOutCubic);
-                }
-                else
-                {
-                    slideRectTransform.DOAnchorPos(slideInitialPosition, 0.5f)
-                        .SetEase(Ease.InOutCubic);
-                }
+                StartCoroutine(MoveSlideObject(new Vector2(0, -660f), true));
+            }
+            else
+            {
+                StartCoroutine(MoveSlideObject(new Vector2(0, -1218f), false));
             }
         }
+    }
+
+    private IEnumerator MoveSlideObject(Vector2 targetPosition, bool activate)
+    {
+        RectTransform slideRectTransform = slideObject.GetComponent<RectTransform>();
+        Vector2 startPosition = slideRectTransform.anchoredPosition;
+        Vector2 endPosition = activate ? targetPosition : new Vector2(slideRectTransform.anchoredPosition.x, -1218f);
+        float duration = 0.5f;
+        float elapsedTime = 0;
+
+        if (activate)
+        {
+            slideObject.SetActive(true);
+        }
+
+        while (elapsedTime < duration)
+        {
+            slideRectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        slideRectTransform.anchoredPosition = endPosition;
     }
 
     private void UpdateCameraEffect(State targetState)
