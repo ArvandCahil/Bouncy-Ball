@@ -6,7 +6,7 @@ using UnityEngine;
 public class UnitController : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 1f;
-    [SerializeField] int maxMoves; // Set the maximum number of moves allowed
+    [SerializeField] int maxMoves; 
 
     [SerializeField] Vector2Int movementBoundsMin = new Vector2Int(-10, -10);
     [SerializeField] Vector2Int movementBoundsMax = new Vector2Int(10, 10);
@@ -19,7 +19,7 @@ public class UnitController : MonoBehaviour
     GridManager gridManager;
     Pathfinding pathFinder;
 
-    int moveCount = 0; // Track the number of moves made
+    int moveCount = 0; 
 
     void Start()
     {
@@ -58,7 +58,7 @@ public class UnitController : MonoBehaviour
                         Vector2Int targetCords = hit.transform.GetComponent<Tile>().cords;
                         Vector2Int startCords = new Vector2Int((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.z) / gridManager.UnityGridSize;
 
-                        // Check if the target position is within bounds
+                   
                         if (IsWithinBounds(targetCords))
                         {
                             if (moveCount < maxMoves)
