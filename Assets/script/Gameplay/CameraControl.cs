@@ -5,15 +5,13 @@ using Cinemachine;
 
 public class CameraControl : MonoBehaviour
 {
-    public CinemachineFreeLook freeLookCamera;
-    public float zoomSpeed = 2f;
-    public float minFOV = 20f;
-    public float maxFOV = 60f;
-    public float mouseMoveThreshold = 1f; // Threshold untuk mendeteksi pergerakan mouse
-    public float cameraSensitivity = 300f; // Sensitivitas kamera
-
-    [SerializeField]
-    private bool isCameraModeActive = false; // Checkbox untuk mode kamera aktif (disertakan di Inspector)
+    [SerializeField] private CinemachineFreeLook freeLookCamera;
+    [SerializeField] private float zoomSpeed = 2f;
+    [SerializeField] private float minFOV = 20f;
+    [SerializeField] private float maxFOV = 60f;
+    [SerializeField] private float mouseMoveThreshold = 1f;
+    [SerializeField] private float cameraSensitivity = 300f;
+    [SerializeField] private bool isCameraModeActive = false;
 
     private bool isCameraMode = false;
     private Vector3 lastMousePosition;
@@ -51,7 +49,6 @@ public class CameraControl : MonoBehaviour
         // Aktifkan atau nonaktifkan kontrol kamera berdasarkan input mouse (PC/laptop) atau touch (Android)
         if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
         {
-            // Simpan posisi mouse saat ini
             lastMousePosition = Input.mousePosition;
             isCameraMode = false;
         }
@@ -60,7 +57,6 @@ public class CameraControl : MonoBehaviour
         {
             Vector3 mouseDelta = Input.mousePosition - lastMousePosition;
 
-            // Jika pergerakan mouse melebihi threshold, aktifkan mode kamera
             if (mouseDelta.magnitude > mouseMoveThreshold)
             {
                 isCameraMode = true;
@@ -68,27 +64,23 @@ public class CameraControl : MonoBehaviour
 
             if (isCameraMode)
             {
-                // Sembunyikan kursor saat tombol mouse kiri ditekan dan ada pergerakan mouse (PC/laptop)
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
 
-                // Gerakkan kamera
-                freeLookCamera.m_XAxis.m_MaxSpeed = cameraSensitivity;  // Gunakan sensitivitas kamera yang diatur
-                freeLookCamera.m_YAxis.m_MaxSpeed = cameraSensitivity / 150f;  // Sesuaikan kecepatan rotasi sesuai kebutuhanmu
-                isCameraModeActive = true; // Centang checkbox saat mode kamera aktif
+                freeLookCamera.m_XAxis.m_MaxSpeed = cameraSensitivity;
+                freeLookCamera.m_YAxis.m_MaxSpeed = cameraSensitivity / 150f;
+                isCameraModeActive = true;
             }
         }
         else
         {
             if (isCameraMode)
             {
-                // Tampilkan kursor saat tombol mouse kiri dilepas (PC/laptop)
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
-                isCameraModeActive = false; // Uncentang checkbox saat mode kamera tidak aktif
+                isCameraModeActive = false;
             }
 
-            // Nonaktifkan gerakan kamera
             freeLookCamera.m_XAxis.m_MaxSpeed = 0;
             freeLookCamera.m_YAxis.m_MaxSpeed = 0;
         }
