@@ -2,117 +2,123 @@ using UnityEngine;
 
 public class StoneController : MonoBehaviour
 {
-    [SerializeField] private Material hoverMaterial; // Material untuk efek hover
-    [SerializeField] private Material defaultMaterial; // Material default
-    [SerializeField] private CameraControl cameraControl; // Referensi ke kontroler kamera
+    [SerializeField] private Material hoverMaterial;
+    [SerializeField] private Material defaultMaterial;
+    [SerializeField] private CameraControl cameraControl;
 
-    private Vector3 offset; // Offset posisi batu
-    private bool isDragging = false; // Status apakah batu sedang diseret
-    private PipeController currentPipe; // Referensi ke kontroler pipa
-    private Renderer stoneRenderer; // Renderer batu
+    [SerializeField] private float moveSpeed = 5f; // Kecepatan pergerakan stone yang dapat diatur dari Inspector
+
+    private Vector3 offset;
+    private bool isDragging = false;
+    private PipeController currentPipe;
+    private Renderer stoneRenderer;
+    private Vector3 targetPosition;
+    private bool isMoving = false;
 
     private void Awake()
     {
         stoneRenderer = GetComponent<Renderer>();
         if (stoneRenderer != null)
         {
-            stoneRenderer.material = defaultMaterial; // Set material default saat inisialisasi
+            stoneRenderer.material = defaultMaterial;
         }
     }
 
     private void OnMouseEnter()
     {
-        // Jika mouse memasuki area batu
         if (cameraControl != null)
         {
-            cameraControl.SetCameraActive(false); // Nonaktifkan kamera saat hover
+            cameraControl.SetCameraActive(false);
         }
 
         if (stoneRenderer != null && hoverMaterial != null)
         {
-            stoneRenderer.material = hoverMaterial; // Ganti material menjadi hoverMaterial
+            stoneRenderer.material = hoverMaterial;
         }
     }
 
     private void OnMouseExit()
     {
-        // Jika mouse keluar dari area batu
         if (!isDragging && cameraControl != null)
         {
-            cameraControl.SetCameraActive(true); // Aktifkan kamera saat tidak diseret
+            cameraControl.SetCameraActive(true);
         }
 
         if (!isDragging && stoneRenderer != null && defaultMaterial != null)
         {
-            stoneRenderer.material = defaultMaterial; // Kembalikan material ke defaultMaterial
+            stoneRenderer.material = defaultMaterial;
         }
     }
 
     private void OnMouseDown()
     {
-        // Saat mouse ditekan pada batu
-        offset = transform.position - GetMouseWorldPosition(); // Hitung offset posisi batu
-        isDragging = true; // Set status sedang diseret
-        currentPipe = GetComponentInParent<PipeController>(); // Dapatkan referensi ke PipeController
+        offset = transform.position - GetMouseWorldPosition();
+        isDragging = true;
+        currentPipe = GetComponentInParent<PipeController>();
 
         if (stoneRenderer != null && hoverMaterial != null)
         {
-            stoneRenderer.material = hoverMaterial; // Ganti material menjadi hoverMaterial saat diseret
+            stoneRenderer.material = hoverMaterial;
         }
     }
 
     private void OnMouseUp()
     {
-        // Saat mouse dilepas dari batu
         isDragging = false;
 
         if (cameraControl != null)
         {
-            cameraControl.SetCameraActive(true); // Aktifkan kamera saat tidak diseret
+            cameraControl.SetCameraActive(true);
         }
 
         if (stoneRenderer != null && defaultMaterial != null)
         {
-            stoneRenderer.material = defaultMaterial; // Kembalikan material ke defaultMaterial
+            stoneRenderer.material = defaultMaterial;
         }
     }
 
     private void Update()
     {
-        // Perbarui posisi batu saat diseret
         if (isDragging && currentPipe != null)
         {
-            Vector3 mousePosition = GetMouseWorldPosition() + offset; // Dapatkan posisi mouse di dunia
-            Vector3 pipeCenter = currentPipe.GetPipeCenter(); // Dapatkan pusat pipa
-            float pipeLength = currentPipe.GetPipeLength() / 2; // Hitung panjang setengah pipa
+            Vector3 mousePosition = GetMouseWorldPosition() + offset;
+            Vector3 pipeCenter = currentPipe.GetPipeCenter();
+            float pipeLength = currentPipe.GetPipeLength() / 2;
 
+            Vector3 newPosition;
             if (currentPipe.IsHorizontal)
             {
-                // Jika pipa horizontal, batasi pergerakan batu pada sumbu X
-                mousePosition.y = transform.position.y;
-                mousePosition.z = transform.position.z;
-                mousePosition.x = Mathf.Clamp(mousePosition.x, pipeCenter.x - pipeLength, pipeCenter.x + pipeLength);
+                float clampedX = Mathf.Clamp(mousePosition.x, pipeCenter.x - pipeLength, pipeCenter.x + pipeLength);
+                newPosition = new Vector3(clampedX, transform.position.y, transform.position.z);
             }
             else
             {
-                // Jika pipa vertikal, batasi pergerakan batu pada sumbu Z
-                mousePosition.x = transform.position.x;
-                mousePosition.y = transform.position.y;
-                mousePosition.z = Mathf.Clamp(mousePosition.z, pipeCenter.z - pipeLength, pipeCenter.z + pipeLength);
+                float clampedY = Mathf.Clamp(mousePosition.y, pipeCenter.y - pipeLength, pipeCenter.y + pipeLength);
+                newPosition = new Vector3(transform.position.x, clampedY, transform.position.z);
             }
 
-            transform.position = mousePosition; // Set posisi batu
+            // Set target position for interpolation
+            targetPosition = newPosition;
+            isMoving = true;
+        }
+
+        if (isMoving)
+        {
+            // Smoothly move the stone towards the target position
+            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
+
+            // Stop moving when close enough to the target
+            if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
+            {
+                isMoving = false;
+            }
         }
     }
 
     private Vector3 GetMouseWorldPosition()
     {
-        // Mengubah posisi mouse menjadi posisi dunia
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            return hit.point;
-        }
-        return Vector3.zero;
+        Vector3 mousePoint = Input.mousePosition;
+        mousePoint.z = Camera.main.WorldToScreenPoint(transform.position).z;
+        return Camera.main.ScreenToWorldPoint(mousePoint);
     }
 }

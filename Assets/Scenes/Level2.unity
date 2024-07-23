@@ -8614,6 +8614,7 @@ MonoBehaviour:
   mouseMoveThreshold: 1
   cameraSensitivity: 300
   isCameraModeActive: 0
+  stoneController: {fileID: 1704443562}
 --- !u!1001 &431775750
 PrefabInstance:
   m_ObjectHideFlags: 0
