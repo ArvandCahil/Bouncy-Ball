@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class playerInformation
 {
-    public profile profile;
-    public currency currency;
-    public inventory inventory;
+    public profile profile = new profile();
+    public currency currency = new currency();
+    public inventory inventory = new inventory();
 }
 
 public class profile 

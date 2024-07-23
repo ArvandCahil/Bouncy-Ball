@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
 using TMPro;
+using UnityEngine.Rendering;
 
 public class NavigationBar : MonoBehaviour
 {
@@ -24,6 +26,11 @@ public class NavigationBar : MonoBehaviour
     [SerializeField] private GameObject homeObject;
     [SerializeField] private GameObject inventoryObject;
 
+    private Camera mainCamera;
+    private Camera overlayCamera;
+    private Volume EnvironmentVolume;
+    private Volume BallVolume;
+
     private void Start()
     {
         stateInformation = new Dictionary<State, float>();
@@ -39,6 +46,35 @@ public class NavigationBar : MonoBehaviour
 
         inactiveColor = new Color(0.905f, 0.905f, 0.905f);
         activeColor = new Color(0.196f, 0.196f, 0.196f);
+
+        mainCamera = Camera.main;
+
+        if (mainCamera != null)
+        {
+            UniversalAdditionalCameraData cameraData = mainCamera.GetComponent<UniversalAdditionalCameraData>();
+            if (cameraData != null && cameraData.cameraStack.Count > 0)
+            {
+                overlayCamera = cameraData.cameraStack[0];
+            }
+        }
+
+        if (mainCamera == null)
+        {
+            Debug.LogError("Main camera not found!");
+        }
+        if (overlayCamera == null)
+        {
+            Debug.LogError("Overlay camera not found in the camera stack!");
+        }
+
+        Volume[] cache = GameObject.FindObjectsByType<Volume>();
+        foreach (GameObject p in cache)
+        {
+            if(gameObject.layer.Equals("Post Processing"))
+            {
+
+            }
+        }
 
         setState(State.home);
     }
@@ -67,6 +103,32 @@ public class NavigationBar : MonoBehaviour
                     targetText.DOColor(activeColor, 0.3f);
                 });
             }
+
+            UpdateCameraEffect(targetState);
+        }
+    }
+
+    private void UpdateCameraEffect(State targetState)
+    {
+        if (mainCamera != null && overlayCamera != null)
+        {
+            float targetFOV = 60f;
+            if (targetState == State.inventory)
+            {
+                targetFOV = 30f;
+            }else if (targetState == State.shop)
+            {
+                targetFOV = 90f;
+            }
+            else if(targetState == State.home)
+            {
+                targetFOV = 60f;
+            }
+
+            mainCamera.DOKill();
+            overlayCamera.DOKill();
+            mainCamera.DOFieldOfView(targetFOV, 0.5f).SetEase(Ease.InOutCubic);
+            overlayCamera.DOFieldOfView(targetFOV, 0.5f).SetEase(Ease.InOutCubic);
         }
     }
 

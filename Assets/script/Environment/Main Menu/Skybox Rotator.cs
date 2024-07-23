@@ -13,7 +13,7 @@ public class SkyboxRotator : MonoBehaviour
 
     private void Start()
     {
-        int hour = 12;// DateTime.Now.Hour;
+        int hour = DateTime.Now.Hour;
         Color color = Color.black;
         Debug.Log(hour);
 
@@ -94,5 +94,6 @@ public class SkyboxRotator : MonoBehaviour
         }
 
         skybox.SetColor("_Tint", color);
+        DynamicGI.UpdateEnvironment();
     }
 }

@@ -14,17 +14,14 @@ public class generalManager : MonoBehaviour
 
     private void Start()
     {
-        if (instance != null)
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-    }
 
-    private void newPlayer()
-    {
-        
-
+        playerInformation = new playerInformation();
+        generalManager.saveManager.load();
     }
 
     public static class currency
@@ -67,11 +64,11 @@ public class generalManager : MonoBehaviour
 
     }
 
-    public class inventory
+    public static class inventory
     {
-        public class skin
+        public static class skin
         {
-            public bool addItem(int id)
+            public static bool addItem(int id)
             {
                 if (!instance.playerInformation.inventory.ownedSkinID.Contains(id))
                 {
@@ -85,7 +82,7 @@ public class generalManager : MonoBehaviour
 
             }
 
-            public bool removeItem(int id)
+            public static bool removeItem(int id)
             {
                 for (int i = 0; i < instance.playerInformation.inventory.ownedSkinID.Length; i++)
                 {
@@ -103,7 +100,7 @@ public class generalManager : MonoBehaviour
 
             }
 
-            public bool equipitem(int id)
+            public static bool equipitem(int id)
             {
                 if (instance.playerInformation.inventory.ownedSkinID.Contains(id))
                 {
@@ -139,21 +136,51 @@ public class generalManager : MonoBehaviour
 
     }
 
-    public class saveManager
+    public static class saveManager
     {
-        public void save()
+        public static void save()
         {
             string json = JsonUtility.ToJson(instance.playerInformation);
-            string path = Application.persistentDataPath + "/" + instance.playerInformation.profile.name;
-            StreamWriter writer = new StreamWriter(path);
-            writer.Write(json);
+            string path = Application.persistentDataPath + "/data.json";
+            File.WriteAllText(path, json);
         }
-        public void load() 
+        public static void load() 
         {
-            string path = Application.persistentDataPath + "/" + instance.playerInformation.profile.name;
-            StreamReader reader = new StreamReader(path);
-            instance.playerInformation = JsonUtility.FromJson<playerInformation>(reader.ReadToEnd());
-            generalManager.currency.star.refresh();
+            try
+            {
+                setUpData();
+
+                string path = Application.persistentDataPath + "/data.json";
+                Debug.Log(path);
+                string file = File.ReadAllText(path);
+                instance.playerInformation = JsonUtility.FromJson<playerInformation>(file);
+                generalManager.currency.star.refresh();
+            }
+            catch(Exception e) 
+            {
+                save();
+            }
+
         }
+
+        private static void setUpData()
+        {
+            playerInformation player = new playerInformation();
+
+            // Set Up Profile
+            player.profile.name = "cache";
+
+            // Set Up Currency
+            player.currency.star = 0;
+
+            // Set Up Inventory
+            player.inventory.equippedSkinID = 0;
+            player.inventory.ownedSkinID = new int[0];
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        generalManager.saveManager.save();
     }
 }
