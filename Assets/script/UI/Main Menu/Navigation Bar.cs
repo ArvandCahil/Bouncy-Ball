@@ -67,12 +67,15 @@ public class NavigationBar : MonoBehaviour
             Debug.LogError("Overlay camera not found in the camera stack!");
         }
 
-        Volume[] cache = GameObject.FindObjectsByType<Volume>();
+        GameObject[] cache = GameObject.FindGameObjectsWithTag("Post Processing");
         foreach (GameObject p in cache)
         {
             if(gameObject.layer.Equals("Post Processing"))
             {
-
+                EnvironmentVolume = p.GetComponent<Volume>();
+            }else if(gameObject.layer.Equals("Post Processing 1"))
+            {
+                BallVolume = p.GetComponent<Volume>();
             }
         }
 
