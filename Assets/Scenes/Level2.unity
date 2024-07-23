@@ -37044,6 +37044,7 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: a31e78a5f4c6b064594e4ba82590ef86, type: 2}
   defaultMaterial: {fileID: 2100000, guid: ad1500310b7a8c5489a0ce2046a73543, type: 2}
   cameraControl: {fileID: 429794675}
+  moveSpeed: 5
 --- !u!4 &1704939518 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3970715263525982204, guid: 4e0d60c765fbf8f41b5875971a9ff0e0,
