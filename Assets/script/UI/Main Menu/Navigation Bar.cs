@@ -25,6 +25,11 @@ public class NavigationBar : MonoBehaviour
     [SerializeField] private GameObject shopObject;
     [SerializeField] private GameObject homeObject;
     [SerializeField] private GameObject inventoryObject;
+    [SerializeField] private GameObject playObject;
+    [SerializeField] private GameObject slideObject;
+
+    private Vector3 playInitialPosition;
+    private Vector3 slideInitialPosition;
 
     private Camera mainCamera;
     private Camera overlayCamera;
@@ -70,13 +75,25 @@ public class NavigationBar : MonoBehaviour
         GameObject[] cache = GameObject.FindGameObjectsWithTag("Post Processing");
         foreach (GameObject p in cache)
         {
-            if(gameObject.layer.Equals("Post Processing"))
+            if (gameObject.layer.Equals("Post Processing"))
             {
                 EnvironmentVolume = p.GetComponent<Volume>();
-            }else if(gameObject.layer.Equals("Post Processing 1"))
+            }
+            else if (gameObject.layer.Equals("Post Processing 1"))
             {
                 BallVolume = p.GetComponent<Volume>();
             }
+        }
+
+        if (playObject != null)
+        {
+            playInitialPosition = playObject.transform.position;
+        }
+
+        if (slideObject != null)
+        {
+            slideInitialPosition = slideObject.transform.position;
+            Debug.Log("SlideObject Initial Position: " + slideInitialPosition);
         }
 
         setState(State.home);
@@ -108,6 +125,48 @@ public class NavigationBar : MonoBehaviour
             }
 
             UpdateCameraEffect(targetState);
+            UpdatePlayObject(targetState);
+            UpdateSlideObject(targetState);
+        }
+    }
+
+    private void UpdatePlayObject(State targetState)
+    {
+        if (playObject != null)
+        {
+            if (targetState == State.home)
+            {
+                playObject.SetActive(true);
+                playObject.transform.DOLocalMove(playInitialPosition, 0.5f)
+                    .SetEase(Ease.InOutCubic);
+            }
+            else
+            {
+                playObject.transform.DOLocalMove(playInitialPosition - new Vector3(0, 700f, 0), 0.5f)
+                    .SetEase(Ease.InOutCubic);
+            }
+        }
+    }
+
+    private void UpdateSlideObject(State targetState)
+    {
+        if (slideObject != null)
+        {
+            RectTransform slideRectTransform = slideObject.GetComponent<RectTransform>();
+            if (slideRectTransform != null)
+            {
+                if (targetState == State.inventory)
+                {
+                    slideObject.SetActive(true);
+                    slideRectTransform.DOAnchorPos(new Vector2(slideInitialPosition.x, slideInitialPosition.y + 1000f), 0.5f)
+                        .SetEase(Ease.InOutCubic);
+                }
+                else
+                {
+                    slideRectTransform.DOAnchorPos(slideInitialPosition, 0.5f)
+                        .SetEase(Ease.InOutCubic);
+                }
+            }
         }
     }
 
@@ -119,11 +178,12 @@ public class NavigationBar : MonoBehaviour
             if (targetState == State.inventory)
             {
                 targetFOV = 30f;
-            }else if (targetState == State.shop)
+            }
+            else if (targetState == State.shop)
             {
                 targetFOV = 90f;
             }
-            else if(targetState == State.home)
+            else if (targetState == State.home)
             {
                 targetFOV = 60f;
             }
