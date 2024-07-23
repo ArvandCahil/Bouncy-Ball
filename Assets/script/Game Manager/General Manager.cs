@@ -12,6 +12,11 @@ public class generalManager : MonoBehaviour
     public static generalManager instance;
     private playerInformation playerInformation;
 
+    void Awake()
+    {
+        Application.targetFrameRate = 240;
+    }
+
     private void Start()
     {
         if (instance == null)
