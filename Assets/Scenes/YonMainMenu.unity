@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.5884217, g: 0.73847276, b: 0.8316154, a: 1}
+  m_IndirectSpecularColor: {r: 0.6721553, g: 0.84213525, b: 0.8316188, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2319,7 +2319,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2667987487746653253, guid: d4cffccd323f62949887e6473155a848,
+        type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 1792341365}
   m_SourcePrefab: {fileID: 100100000, guid: d4cffccd323f62949887e6473155a848, type: 3}
 --- !u!1 &375635691
 GameObject:
@@ -4559,7 +4563,7 @@ GameObject:
   - component: {fileID: 853253606}
   m_Layer: 6
   m_Name: Post Processing
-  m_TagString: Untagged
+  m_TagString: Post Process
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6965,6 +6969,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 20189682}
   overlayCamera: {fileID: 2087864764}
+  inventoryButton: {fileID: 1256220874}
+  homeButton: {fileID: 2103082528}
+  navigator: {fileID: 1243419696}
 --- !u!1001 &1253004758
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7123,18 +7130,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 754383997}
-        m_TargetAssemblyTypeName: NavigationBar, Assembly-CSharp
-        m_MethodName: onButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1243419696}
         m_TargetAssemblyTypeName: Navigator, Assembly-CSharp
         m_MethodName: inventory
@@ -7143,6 +7138,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 754383997}
+        m_TargetAssemblyTypeName: NavigationBar, Assembly-CSharp
+        m_MethodName: onButtonClick
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -7321,7 +7328,7 @@ Transform:
   m_GameObject: {fileID: 1323245541}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.9559994, y: 2.168, z: 0.183}
+  m_LocalPosition: {x: -1.15, y: 2.168, z: 0.183}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11165,6 +11172,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 368867000}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1792341365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1792341359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02605071738751a41849fb8faf99638f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1793373157
 GameObject:
   m_ObjectHideFlags: 0
@@ -12977,7 +12996,7 @@ GameObject:
   - component: {fileID: 2062972694}
   m_Layer: 8
   m_Name: Post Processing 1
-  m_TagString: Untagged
+  m_TagString: Post Process
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13486,18 +13505,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 754383997}
-        m_TargetAssemblyTypeName: NavigationBar, Assembly-CSharp
-        m_MethodName: onButtonClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1243419696}
         m_TargetAssemblyTypeName: Navigator, Assembly-CSharp
         m_MethodName: home
@@ -13506,6 +13513,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 754383997}
+        m_TargetAssemblyTypeName: NavigationBar, Assembly-CSharp
+        m_MethodName: onButtonClick
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
