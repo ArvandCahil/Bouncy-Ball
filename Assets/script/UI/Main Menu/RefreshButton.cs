@@ -18,9 +18,7 @@ public class RefreshButton : MonoBehaviour
 
     public void StartAnimation()
     {
-        
         refreshButton.interactable = false;
-
         
         transform.DORotate(new Vector3(0, 0, -360), rotationSpeed, RotateMode.FastBeyond360)
                  .SetEase(Ease.InOutCubic)

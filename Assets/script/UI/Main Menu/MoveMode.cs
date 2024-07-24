@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening; 
 
-public class MoveObjectsOnButtonPress : MonoBehaviour
+public class MoveMode : MonoBehaviour
 {
     public GameObject object1;
     public GameObject object2;

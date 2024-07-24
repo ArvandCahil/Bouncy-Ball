@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.5217136, g: 0.65496814, b: 0.78581524, a: 1}
+  m_IndirectSpecularColor: {r: 0.5508951, g: 0.6913876, b: 0.83163744, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5171,7 +5171,7 @@ GameObject:
   - component: {fileID: 867789626}
   - component: {fileID: 867789625}
   m_Layer: 5
-  m_Name: Mode Button
+  m_Name: Casual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8376,7 +8376,7 @@ MonoBehaviour:
   object2: {fileID: 1804489418}
   button: {fileID: 1503810610}
   moveDuration: 0.5
-  easeType: 7
+  easeType: 10
 --- !u!1001 &1345795330
 PrefabInstance:
   m_ObjectHideFlags: 0
