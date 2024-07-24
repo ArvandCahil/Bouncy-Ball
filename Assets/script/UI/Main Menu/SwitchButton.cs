@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class RefreshButton : MonoBehaviour
+public class SwitchButton : MonoBehaviour
 {
     public Button refreshButton;       
     public float rotationSpeed = 2f;   

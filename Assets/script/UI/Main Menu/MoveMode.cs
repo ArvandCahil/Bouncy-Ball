@@ -46,7 +46,6 @@ public class MoveMode : MonoBehaviour
             
             DOTween.Sequence()
                 .Append(object1.transform.DOMove(secondTargetPosition1, 0f)) 
-                .AppendInterval(0.1f) 
                 .Append(object1.transform.DOMove(moveAfterTeleportPositionObject1, moveDuration).SetEase(easeType))
                 .Play();
 
@@ -57,7 +56,6 @@ public class MoveMode : MonoBehaviour
             
             DOTween.Sequence()
                 .Append(object2.transform.DOMove(new Vector3(645f, 735f, 0), 0f)) 
-                .AppendInterval(0.1f) 
                 .Append(object2.transform.DOMove(moveAfterTeleportPositionObject2, moveDuration).SetEase(easeType))
                 .Play();
 
