@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Rendering.Universal;
 using TMPro;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 
 public class NavigationBar : MonoBehaviour
@@ -35,6 +35,9 @@ public class NavigationBar : MonoBehaviour
     private Camera overlayCamera;
     private Volume EnvironmentVolume;
     private Volume BallVolume;
+    private DepthOfField envDOF;
+    private ColorAdjustments ca;
+    private Bloom bloom;
 
     private void Start()
     {
@@ -72,18 +75,11 @@ public class NavigationBar : MonoBehaviour
             Debug.LogError("Overlay camera not found in the camera stack!");
         }
 
-        GameObject[] cache = GameObject.FindGameObjectsWithTag("Post Processing");
-        foreach (GameObject p in cache)
-        {
-            if (gameObject.layer.Equals("Post Processing"))
-            {
-                EnvironmentVolume = p.GetComponent<Volume>();
-            }
-            else if (gameObject.layer.Equals("Post Processing 1"))
-            {
-                BallVolume = p.GetComponent<Volume>();
-            }
-        }
+        EnvironmentVolume = GameObject.FindGameObjectWithTag("Post Process").GetComponent<Volume>();
+        BallVolume = GameObject.FindGameObjectWithTag("Post Process 1").GetComponent<Volume>();
+        EnvironmentVolume.profile.TryGet(out envDOF);
+        EnvironmentVolume.profile.TryGet(out ca);
+        BallVolume.profile.TryGet(out bloom);
 
         if (playObject != null)
         {
@@ -93,7 +89,6 @@ public class NavigationBar : MonoBehaviour
         if (slideObject != null)
         {
             slideInitialPosition = slideObject.transform.position;
-            Debug.Log("SlideObject Initial Position: " + slideInitialPosition);
         }
 
         setState(State.home);
@@ -136,11 +131,11 @@ public class NavigationBar : MonoBehaviour
         {
             if (targetState == State.home)
             {
-                StartCoroutine(MovePlayObject(new Vector2(0, 1168.5f), true)); 
+                StartCoroutine(MovePlayObject(new Vector2(0, 1168.5f), true));
             }
             else
             {
-                StartCoroutine(MovePlayObject(new Vector2(0, 316f), false)); 
+                StartCoroutine(MovePlayObject(new Vector2(0, 316f), false));
             }
         }
     }
@@ -172,38 +167,9 @@ public class NavigationBar : MonoBehaviour
     {
         if (slideObject != null)
         {
-            if (targetState == State.inventory)
-            {
-                StartCoroutine(MoveSlideObject(new Vector2(0, -660f), true));
-            }
-            else
-            {
-                StartCoroutine(MoveSlideObject(new Vector2(0, -1218f), false));
-            }
+            Vector2 targetPosition = targetState == State.inventory ? new Vector2(0, -660f) : new Vector2(0, -1218f);
+            slideObject.transform.DOLocalMoveY(targetPosition.y, 0.5f).SetEase(Ease.InOutCubic);
         }
-    }
-
-    private IEnumerator MoveSlideObject(Vector2 targetPosition, bool activate)
-    {
-        RectTransform slideRectTransform = slideObject.GetComponent<RectTransform>();
-        Vector2 startPosition = slideRectTransform.anchoredPosition;
-        Vector2 endPosition = activate ? targetPosition : new Vector2(slideRectTransform.anchoredPosition.x, -1218f);
-        float duration = 0.5f;
-        float elapsedTime = 0;
-
-        if (activate)
-        {
-            slideObject.SetActive(true);
-        }
-
-        while (elapsedTime < duration)
-        {
-            slideRectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        slideRectTransform.anchoredPosition = endPosition;
     }
 
     private void UpdateCameraEffect(State targetState)
@@ -211,16 +177,36 @@ public class NavigationBar : MonoBehaviour
         if (mainCamera != null && overlayCamera != null)
         {
             float targetFOV = 60f;
+            float startFocusDistance = 17.4f;
             if (targetState == State.inventory)
             {
+                DOTween.To(() => envDOF.focusDistance.value, x => envDOF.focusDistance.value = x, 8f, 1f).SetEase(Ease.InOutCubic);
+                DOTween.To(() => bloom.intensity.value, x => envDOF.focusDistance.value = x, 1f, 1f).SetEase(Ease.InOutCubic).OnStart(() =>
+                {
+                    bloom.active = true;
+                });
+                DOTween.To(() => ca.saturation.value, x => ca.saturation.value = x, -100f, 1f).SetEase(Ease.InOutCubic);
                 targetFOV = 30f;
+
             }
             else if (targetState == State.shop)
             {
+                DOTween.To(() => envDOF.focusDistance.value, x => envDOF.focusDistance.value = x, 17.4f, 0.5f).SetEase(Ease.InOutCubic);
+                DOTween.To(() => bloom.intensity.value, x => bloom.intensity.value = x, 2f, 1f).SetEase(Ease.InOutCubic).OnComplete(() =>
+                {
+                    bloom.active = false;
+                });
+                DOTween.To(() => ca.saturation.value, x => ca.saturation.value = x, 0f, 1f).SetEase(Ease.InOutCubic);
                 targetFOV = 90f;
             }
             else if (targetState == State.home)
             {
+                DOTween.To(() => envDOF.focusDistance.value, x => envDOF.focusDistance.value = x, 17.4f, 0.5f).SetEase(Ease.InOutCubic);
+                DOTween.To(() => bloom.intensity.value, x => bloom.intensity.value = x, 2f, 1f).SetEase(Ease.InOutCubic).OnComplete(() =>
+                {
+                    bloom.active = false;
+                });
+                DOTween.To(() => ca.saturation.value, x => ca.saturation.value = x, 0f, 1f).SetEase(Ease.InOutCubic);
                 targetFOV = 60f;
             }
 
