@@ -24368,6 +24368,8 @@ MonoBehaviour:
   maxMoves: 10
   movementBoundsMin: {x: -10, y: -10}
   movementBoundsMax: {x: 10, y: 10}
+  doubleTapTime: 0.3
+  lastTapTime: 0
 --- !u!135 &2026979716
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -26066,6 +26068,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2026979712}
     m_Modifications:
+    - target: {fileID: 1050015372419836586, guid: d4cffccd323f62949887e6473155a848,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b75a7752ab5919945885af4d9866e6ad, type: 2}
     - target: {fileID: 2667987487746653253, guid: d4cffccd323f62949887e6473155a848,
         type: 3}
       propertyPath: m_Name

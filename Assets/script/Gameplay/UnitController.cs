@@ -19,7 +19,10 @@ public class UnitController : MonoBehaviour
     GridManager gridManager;
     Pathfinding pathFinder;
 
-    int moveCount = 0; 
+    int moveCount = 0;
+    [SerializeField] float doubleTapTime = 0.3f;
+    [SerializeField] float lastTapTime = 0f;
+    private bool isDoubleTap = false;
 
     void Start()
     {
@@ -27,10 +30,26 @@ public class UnitController : MonoBehaviour
         pathFinder = FindObjectOfType<Pathfinding>();
         Debug.Log($"Max Moves: {maxMoves}");
         Debug.Log(gameObject.name);
+
+        float currentTime = Time.time;
+        if (currentTime - lastTapTime < doubleTapTime)
+        {
+            isDoubleTap = true;
+        }
+        else
+        {
+            isDoubleTap = false;
+        }
+        lastTapTime = currentTime;
     }
 
     // Update is called once per frame
     void Update()
+    {
+        RaycastFunc();
+    }
+
+    public void RaycastFunc()
     {
         if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
@@ -51,14 +70,27 @@ public class UnitController : MonoBehaviour
 
             if (hasHit)
             {
-                if (hit.transform.CompareTag("tile"))
+                if (hit.transform.CompareTag("tile") || hit.transform.CompareTag("tp") || hit.transform.CompareTag("target"))
                 {
+                    if (unitSelected && hit.transform.CompareTag("tp"))
+                    {
+                        GameObject targetObject = GameObject.FindGameObjectWithTag("target");
+                        if (targetObject != null)
+                        {
+                            selectedUnit.transform.position = new Vector3(targetObject.transform.position.x, targetObject.transform.position.y + 1, targetObject.transform.position.z);
+                            Debug.Log("Unit teleported to target position.");
+                        }
+                        else
+                        {
+                            Debug.Log("Target object not found.");
+                        }
+                    }
                     if (unitSelected)
                     {
                         Vector2Int targetCords = hit.transform.GetComponent<Tile>().cords;
                         Vector2Int startCords = new Vector2Int((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.z) / gridManager.UnityGridSize;
 
-                   
+
                         if (IsWithinBounds(targetCords))
                         {
                             if (moveCount < maxMoves)
