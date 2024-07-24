@@ -34,10 +34,8 @@ public class NavigationBar : MonoBehaviour
     private Camera mainCamera;
     private Camera overlayCamera;
     private Volume EnvironmentVolume;
-    private Volume BallVolume;
     private DepthOfField envDOF;
     private ColorAdjustments ca;
-    private Bloom bloom;
 
     private void Start()
     {
@@ -76,10 +74,8 @@ public class NavigationBar : MonoBehaviour
         }
 
         EnvironmentVolume = GameObject.FindGameObjectWithTag("Post Process").GetComponent<Volume>();
-        BallVolume = GameObject.FindGameObjectWithTag("Post Process 1").GetComponent<Volume>();
         EnvironmentVolume.profile.TryGet(out envDOF);
         EnvironmentVolume.profile.TryGet(out ca);
-        BallVolume.profile.TryGet(out bloom);
 
         if (playObject != null)
         {
@@ -129,38 +125,10 @@ public class NavigationBar : MonoBehaviour
     {
         if (playObject != null)
         {
-            if (targetState == State.home)
-            {
-                StartCoroutine(MovePlayObject(new Vector2(0, 1168.5f), true));
-            }
-            else
-            {
-                StartCoroutine(MovePlayObject(new Vector2(0, 316f), false));
-            }
+            RectTransform playRectTransform = playObject.GetComponent<RectTransform>();
+            Vector2 targetPosition = targetState == State.home ? new Vector2(0, 1168.5f) : new Vector2(0, 316f);
+            playRectTransform.DOAnchorPos(targetPosition, 0.5f).SetEase(Ease.InOutCubic);
         }
-    }
-
-    private IEnumerator MovePlayObject(Vector2 targetPosition, bool activate)
-    {
-        RectTransform playRectTransform = playObject.GetComponent<RectTransform>();
-        Vector2 startPosition = playRectTransform.anchoredPosition;
-        Vector2 endPosition = activate ? new Vector2(playRectTransform.anchoredPosition.x, 1168.5f) : new Vector2(playRectTransform.anchoredPosition.x, 78f);
-        float duration = 0.5f;
-        float elapsedTime = 0;
-
-        if (activate)
-        {
-            playObject.SetActive(true);
-        }
-
-        while (elapsedTime < duration)
-        {
-            playRectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        playRectTransform.anchoredPosition = endPosition;
     }
 
     private void UpdateSlideObject(State targetState)
@@ -181,10 +149,6 @@ public class NavigationBar : MonoBehaviour
             if (targetState == State.inventory)
             {
                 DOTween.To(() => envDOF.focusDistance.value, x => envDOF.focusDistance.value = x, 8f, 1f).SetEase(Ease.InOutCubic);
-                DOTween.To(() => bloom.intensity.value, x => envDOF.focusDistance.value = x, 1f, 1f).SetEase(Ease.InOutCubic).OnStart(() =>
-                {
-                    bloom.active = true;
-                });
                 DOTween.To(() => ca.saturation.value, x => ca.saturation.value = x, -100f, 1f).SetEase(Ease.InOutCubic);
                 targetFOV = 30f;
 
@@ -192,20 +156,12 @@ public class NavigationBar : MonoBehaviour
             else if (targetState == State.shop)
             {
                 DOTween.To(() => envDOF.focusDistance.value, x => envDOF.focusDistance.value = x, 17.4f, 0.5f).SetEase(Ease.InOutCubic);
-                DOTween.To(() => bloom.intensity.value, x => bloom.intensity.value = x, 2f, 1f).SetEase(Ease.InOutCubic).OnComplete(() =>
-                {
-                    bloom.active = false;
-                });
                 DOTween.To(() => ca.saturation.value, x => ca.saturation.value = x, 0f, 1f).SetEase(Ease.InOutCubic);
                 targetFOV = 90f;
             }
             else if (targetState == State.home)
             {
                 DOTween.To(() => envDOF.focusDistance.value, x => envDOF.focusDistance.value = x, 17.4f, 0.5f).SetEase(Ease.InOutCubic);
-                DOTween.To(() => bloom.intensity.value, x => bloom.intensity.value = x, 2f, 1f).SetEase(Ease.InOutCubic).OnComplete(() =>
-                {
-                    bloom.active = false;
-                });
                 DOTween.To(() => ca.saturation.value, x => ca.saturation.value = x, 0f, 1f).SetEase(Ease.InOutCubic);
                 targetFOV = 60f;
             }
