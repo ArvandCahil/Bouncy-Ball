@@ -18,6 +18,7 @@ public class UnitController : MonoBehaviour
 
     GridManager gridManager;
     Pathfinding pathFinder;
+    Tp tp;
 
     int moveCount = 0;
     [SerializeField] float doubleTapTime = 0.3f;
@@ -31,16 +32,6 @@ public class UnitController : MonoBehaviour
         Debug.Log($"Max Moves: {maxMoves}");
         Debug.Log(gameObject.name);
 
-        float currentTime = Time.time;
-        if (currentTime - lastTapTime < doubleTapTime)
-        {
-            isDoubleTap = true;
-        }
-        else
-        {
-            isDoubleTap = false;
-        }
-        lastTapTime = currentTime;
     }
 
     // Update is called once per frame
@@ -70,21 +61,8 @@ public class UnitController : MonoBehaviour
 
             if (hasHit)
             {
-                if (hit.transform.CompareTag("tile") || hit.transform.CompareTag("tp") || hit.transform.CompareTag("target"))
-                {
-                    if (unitSelected && hit.transform.CompareTag("tp"))
-                    {
-                        GameObject targetObject = GameObject.FindGameObjectWithTag("target");
-                        if (targetObject != null)
-                        {
-                            selectedUnit.transform.position = new Vector3(targetObject.transform.position.x, targetObject.transform.position.y + 1, targetObject.transform.position.z);
-                            Debug.Log("Unit teleported to target position.");
-                        }
-                        else
-                        {
-                            Debug.Log("Target object not found.");
-                        }
-                    }
+                if (hit.transform.CompareTag("tile") || hit.transform.CompareTag("tp"))
+                {                    
                     if (unitSelected)
                     {
                         Vector2Int targetCords = hit.transform.GetComponent<Tile>().cords;
@@ -136,6 +114,8 @@ public class UnitController : MonoBehaviour
         path.Clear();
         path = pathFinder.GetNewPath(coordinates);
         StartCoroutine(FollowPath());
+
+        
     }
 
     IEnumerator FollowPath()
@@ -160,6 +140,11 @@ public class UnitController : MonoBehaviour
 
             Debug.Log(endPosition);
         }
+
+        tp.Teleport(() =>
+        {
+            Debug.Log("Teleportation complete. Callback executed in a different script.");
+        });
     }
 
     bool IsWithinBounds(Vector2Int position)
