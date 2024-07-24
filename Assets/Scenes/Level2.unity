@@ -8471,7 +8471,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &429794673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8614,6 +8614,7 @@ MonoBehaviour:
   mouseMoveThreshold: 1
   cameraSensitivity: 300
   isCameraModeActive: 0
+  stoneController: {fileID: 1704443562}
 --- !u!1001 &431775750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37042,6 +37043,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverMaterial: {fileID: 2100000, guid: a31e78a5f4c6b064594e4ba82590ef86, type: 2}
   defaultMaterial: {fileID: 2100000, guid: ad1500310b7a8c5489a0ce2046a73543, type: 2}
+  cameraControl: {fileID: 429794675}
+  moveSpeed: 5
 --- !u!4 &1704939518 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3970715263525982204, guid: 4e0d60c765fbf8f41b5875971a9ff0e0,
@@ -43744,6 +43747,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 1
+  maxMoves: 0
+  movementBoundsMin: {x: -10, y: -10}
+  movementBoundsMax: {x: 10, y: 10}
 --- !u!114 &2026979715
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,6 +25,11 @@ public class NavigationBar : MonoBehaviour
     [SerializeField] private GameObject shopObject;
     [SerializeField] private GameObject homeObject;
     [SerializeField] private GameObject inventoryObject;
+    [SerializeField] private GameObject playObject;
+    [SerializeField] private GameObject slideObject;
+
+    private Vector3 playInitialPosition;
+    private Vector3 slideInitialPosition;
 
     private Camera mainCamera;
     private Camera overlayCamera;
@@ -70,13 +75,25 @@ public class NavigationBar : MonoBehaviour
         GameObject[] cache = GameObject.FindGameObjectsWithTag("Post Processing");
         foreach (GameObject p in cache)
         {
-            if(gameObject.layer.Equals("Post Processing"))
+            if (gameObject.layer.Equals("Post Processing"))
             {
                 EnvironmentVolume = p.GetComponent<Volume>();
-            }else if(gameObject.layer.Equals("Post Processing 1"))
+            }
+            else if (gameObject.layer.Equals("Post Processing 1"))
             {
                 BallVolume = p.GetComponent<Volume>();
             }
+        }
+
+        if (playObject != null)
+        {
+            playInitialPosition = playObject.transform.position;
+        }
+
+        if (slideObject != null)
+        {
+            slideInitialPosition = slideObject.transform.position;
+            Debug.Log("SlideObject Initial Position: " + slideInitialPosition);
         }
 
         setState(State.home);
@@ -108,7 +125,85 @@ public class NavigationBar : MonoBehaviour
             }
 
             UpdateCameraEffect(targetState);
+            UpdatePlayObject(targetState);
+            UpdateSlideObject(targetState);
         }
+    }
+
+    private void UpdatePlayObject(State targetState)
+    {
+        if (playObject != null)
+        {
+            if (targetState == State.home)
+            {
+                StartCoroutine(MovePlayObject(new Vector2(0, 1168.5f), true)); 
+            }
+            else
+            {
+                StartCoroutine(MovePlayObject(new Vector2(0, 316f), false)); 
+            }
+        }
+    }
+
+    private IEnumerator MovePlayObject(Vector2 targetPosition, bool activate)
+    {
+        RectTransform playRectTransform = playObject.GetComponent<RectTransform>();
+        Vector2 startPosition = playRectTransform.anchoredPosition;
+        Vector2 endPosition = activate ? new Vector2(playRectTransform.anchoredPosition.x, 1168.5f) : new Vector2(playRectTransform.anchoredPosition.x, 78f);
+        float duration = 0.5f;
+        float elapsedTime = 0;
+
+        if (activate)
+        {
+            playObject.SetActive(true);
+        }
+
+        while (elapsedTime < duration)
+        {
+            playRectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        playRectTransform.anchoredPosition = endPosition;
+    }
+
+    private void UpdateSlideObject(State targetState)
+    {
+        if (slideObject != null)
+        {
+            if (targetState == State.inventory)
+            {
+                StartCoroutine(MoveSlideObject(new Vector2(0, -660f), true));
+            }
+            else
+            {
+                StartCoroutine(MoveSlideObject(new Vector2(0, -1218f), false));
+            }
+        }
+    }
+
+    private IEnumerator MoveSlideObject(Vector2 targetPosition, bool activate)
+    {
+        RectTransform slideRectTransform = slideObject.GetComponent<RectTransform>();
+        Vector2 startPosition = slideRectTransform.anchoredPosition;
+        Vector2 endPosition = activate ? targetPosition : new Vector2(slideRectTransform.anchoredPosition.x, -1218f);
+        float duration = 0.5f;
+        float elapsedTime = 0;
+
+        if (activate)
+        {
+            slideObject.SetActive(true);
+        }
+
+        while (elapsedTime < duration)
+        {
+            slideRectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        slideRectTransform.anchoredPosition = endPosition;
     }
 
     private void UpdateCameraEffect(State targetState)
@@ -119,11 +214,12 @@ public class NavigationBar : MonoBehaviour
             if (targetState == State.inventory)
             {
                 targetFOV = 30f;
-            }else if (targetState == State.shop)
+            }
+            else if (targetState == State.shop)
             {
                 targetFOV = 90f;
             }
-            else if(targetState == State.home)
+            else if (targetState == State.home)
             {
                 targetFOV = 60f;
             }
