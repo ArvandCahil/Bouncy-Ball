@@ -2,46 +2,64 @@ using UnityEngine;
 
 public class PipeController : MonoBehaviour
 {
-    [SerializeField] private bool isHorizontalX; // Checkbox untuk orientasi horizontal pada sumbu X
-    [SerializeField] private bool isHorizontalZ; // Checkbox untuk orientasi horizontal pada sumbu Z
-    [SerializeField] private bool isVertical; // Checkbox untuk orientasi vertikal
+    [SerializeField] private bool isHorizontalX;
+    [SerializeField] private bool isHorizontalZ;
+    [SerializeField] private bool isVertical;
 
-    [SerializeField] private float manualLength = 10f; // Panjang manual pipa
-    [SerializeField] private Vector3 centerOffset = Vector3.zero; // Offset pusat pipa
+    [SerializeField] private float manualLength = 4f;
+    [SerializeField] private Vector3 centerOffset = Vector3.zero;
 
     private BoxCollider boxCollider;
 
     private void Awake()
     {
         boxCollider = GetComponent<BoxCollider>();
+        UpdatePipeSettings();
     }
 
-    public bool IsHorizontalX => isHorizontalX; // Getter untuk orientasi horizontal sumbu X
-    public bool IsHorizontalZ => isHorizontalZ; // Getter untuk orientasi horizontal sumbu Z
-    public bool IsVertical => isVertical; // Getter untuk orientasi vertikal
+    private void UpdatePipeSettings()
+    {
+        if (isHorizontalX)
+        {
+            manualLength = 4f;
+            centerOffset = new Vector3(-5f, 0f, 0f);
+        }
+        else if (isHorizontalZ)
+        {
+            manualLength = 4f;
+            centerOffset = new Vector3(0f, 0f, -5f);
+        }
+        else if (isVertical)
+        {
+            manualLength = 4f;
+            centerOffset = new Vector3(0f, 1f, 0f);
+        }
+    }
+
+    public bool IsHorizontalX => isHorizontalX;
+    public bool IsHorizontalZ => isHorizontalZ;
+    public bool IsVertical => isVertical;
 
     public float GetPipeLength()
     {
-        return manualLength; // Menggunakan panjang manual pipa
+        return manualLength;
     }
 
     public Vector3 GetPipeCenter()
     {
-        // Menyesuaikan pusat berdasarkan pivot yang ada di tepi dan offset
         Vector3 pipeCenter = transform.position + centerOffset;
 
-        // Mengatur pusat berdasarkan orientasi pipa
         if (isHorizontalX)
         {
-            pipeCenter += new Vector3(GetPipeLength() / 2, 0, 0); // Pusat di tengah panjang pipa jika horizontal X
+            pipeCenter += new Vector3(GetPipeLength() / 2, 0, 0);
         }
         else if (isHorizontalZ)
         {
-            pipeCenter += new Vector3(0, 0, GetPipeLength() / 2); // Pusat di tengah panjang pipa jika horizontal Z
+            pipeCenter += new Vector3(0, 0, GetPipeLength() / 2);
         }
         else if (isVertical)
         {
-            pipeCenter += new Vector3(0, GetPipeLength() / 2, 0); // Pusat di tengah panjang pipa jika vertikal
+            pipeCenter += new Vector3(0, GetPipeLength() / 2, 0);
         }
 
         return pipeCenter;

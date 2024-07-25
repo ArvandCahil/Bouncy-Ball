@@ -2,26 +2,26 @@ using UnityEngine;
 
 public class StoneController : MonoBehaviour
 {
-    [SerializeField] private Material hoverMaterial; // Material saat hover
-    [SerializeField] private Material defaultMaterial; // Material default
-    [SerializeField] private CameraControl cameraControl; // Referensi ke script CameraControl
+    [SerializeField] private Material hoverMaterial;
+    [SerializeField] private Material defaultMaterial;
+    [SerializeField] private CameraControl cameraControl;
 
-    [SerializeField] private float moveSpeed = 5f; // Kecepatan pergerakan stone yang dapat diatur dari Inspector
-    [SerializeField] private bool sudahSampai; // Variabel boolean untuk status batas pergerakan yang ter-serialize
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private bool sudahSampai;
 
-    private Vector3 offset; // Offset posisi saat drag
-    private bool isDragging = false; // Status apakah stone sedang di-drag
-    private PipeController currentPipe; // Referensi ke PipeController
-    private Renderer stoneRenderer; // Renderer untuk stone
-    private Vector3 targetPosition; // Posisi target untuk interpolasi
-    private bool isMoving = false; // Status apakah stone sedang bergerak
+    private Vector3 offset;
+    private bool isDragging = false;
+    private PipeController currentPipe;
+    private Renderer stoneRenderer;
+    private Vector3 targetPosition;
+    private bool isMoving = false;
 
     private void Awake()
     {
         stoneRenderer = GetComponent<Renderer>();
         if (stoneRenderer != null)
         {
-            stoneRenderer.material = defaultMaterial; // Set material default pada awalnya
+            stoneRenderer.material = defaultMaterial;
         }
     }
 
@@ -29,12 +29,12 @@ public class StoneController : MonoBehaviour
     {
         if (cameraControl != null && !isDragging)
         {
-            cameraControl.SetCameraActive(false); // Nonaktifkan mode kamera saat mouse masuk ke stone dan tidak sedang di-drag
+            cameraControl.SetCameraActive(false);
         }
 
         if (stoneRenderer != null && hoverMaterial != null)
         {
-            stoneRenderer.material = hoverMaterial; // Ganti material menjadi hover saat mouse masuk
+            stoneRenderer.material = hoverMaterial;
         }
     }
 
@@ -42,29 +42,29 @@ public class StoneController : MonoBehaviour
     {
         if (!isDragging && cameraControl != null)
         {
-            cameraControl.SetCameraActive(true); // Aktifkan kembali mode kamera jika tidak ada dragging
+            cameraControl.SetCameraActive(true);
         }
 
         if (!isDragging && stoneRenderer != null && defaultMaterial != null)
         {
-            stoneRenderer.material = defaultMaterial; // Kembali ke material default saat mouse keluar
+            stoneRenderer.material = defaultMaterial;
         }
     }
 
     private void OnMouseDown()
     {
-        offset = transform.position - GetMouseWorldPosition(); // Hitung offset saat mulai dragging
+        offset = transform.position - GetMouseWorldPosition();
         isDragging = true;
-        currentPipe = GetComponentInParent<PipeController>(); // Ambil referensi ke PipeController saat drag dimulai
+        currentPipe = GetComponentInParent<PipeController>();
 
         if (stoneRenderer != null && hoverMaterial != null)
         {
-            stoneRenderer.material = hoverMaterial; // Ganti material menjadi hover saat mouse klik
+            stoneRenderer.material = hoverMaterial;
         }
 
         if (cameraControl != null)
         {
-            cameraControl.SetCameraActive(false); // Nonaktifkan mode kamera saat dragging dimulai
+            cameraControl.SetCameraActive(false);
         }
     }
 
@@ -74,12 +74,12 @@ public class StoneController : MonoBehaviour
 
         if (cameraControl != null)
         {
-            cameraControl.SetCameraActive(true); // Aktifkan kembali mode kamera saat selesai dragging
+            cameraControl.SetCameraActive(true);
         }
 
         if (stoneRenderer != null && defaultMaterial != null)
         {
-            stoneRenderer.material = defaultMaterial; // Kembali ke material default saat mouse dilepas
+            stoneRenderer.material = defaultMaterial;
         }
     }
 
@@ -87,45 +87,41 @@ public class StoneController : MonoBehaviour
     {
         if (isDragging && currentPipe != null)
         {
-            Vector3 mousePosition = GetMouseWorldPosition() + offset; // Hitung posisi mouse dunia dengan offset
-            Vector3 pipeCenter = currentPipe.GetPipeCenter(); // Ambil pusat pipa
-            float pipeLength = currentPipe.GetPipeLength() / 2; // Hitung panjang setengah pipa
+            Vector3 mousePosition = GetMouseWorldPosition() + offset;
+            Vector3 pipeCenter = currentPipe.GetPipeCenter();
+            float pipeLength = currentPipe.GetPipeLength() / 2;
 
             Vector3 newPosition;
             if (currentPipe.IsHorizontalX)
             {
                 float clampedX = Mathf.Clamp(mousePosition.x, pipeCenter.x - pipeLength, pipeCenter.x + pipeLength);
-                newPosition = new Vector3(clampedX, transform.position.y, transform.position.z); // Posisi baru horizontal X
+                newPosition = new Vector3(clampedX, transform.position.y, transform.position.z);
             }
             else if (currentPipe.IsHorizontalZ)
             {
                 float clampedZ = Mathf.Clamp(mousePosition.z, pipeCenter.z - pipeLength, pipeCenter.z + pipeLength);
-                newPosition = new Vector3(transform.position.x, transform.position.y, clampedZ); // Posisi baru horizontal Z
+                newPosition = new Vector3(transform.position.x, transform.position.y, clampedZ);
             }
             else if (currentPipe.IsVertical)
             {
                 float clampedY = Mathf.Clamp(mousePosition.y, pipeCenter.y - pipeLength, pipeCenter.y + pipeLength);
-                newPosition = new Vector3(transform.position.x, clampedY, transform.position.z); // Posisi baru vertikal
+                newPosition = new Vector3(transform.position.x, clampedY, transform.position.z);
             }
             else
             {
-                return; // Jika tidak ada orientasi yang valid, keluar dari fungsi
+                return;
             }
 
-            // Set target position untuk interpolasi
             targetPosition = newPosition;
             isMoving = true;
 
-            // Update status sudahSampai
             UpdateSudahSampai();
         }
 
         if (isMoving)
         {
-            // Gerakkan stone secara halus menuju posisi target
             transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
 
-            // Hentikan pergerakan jika sudah cukup dekat dengan target
             if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
             {
                 isMoving = false;
@@ -158,17 +154,16 @@ public class StoneController : MonoBehaviour
 
         if (edgeReached)
         {
-            sudahSampai = false;
-            Debug.Log("Bola sudah sampai"); // Pesan ketika bola menyentuh batas
+            sudahSampai = true;
+            Debug.Log("Bola sudah sampai");
         }
         else
         {
-            sudahSampai = true;
-            Debug.Log("Bola belum sampai"); // Pesan ketika bola tidak berada di batas
+            sudahSampai = false;
+            Debug.Log("Bola belum sampai");
         }
     }
 
-    // Mengambil posisi mouse dalam dunia
     private Vector3 GetMouseWorldPosition()
     {
         Vector3 mousePoint = Input.mousePosition;
