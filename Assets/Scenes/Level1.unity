@@ -4219,7 +4219,6 @@ MonoBehaviour:
   maxFOV: 60
   mouseMoveThreshold: 1
   cameraSensitivity: 9
-  isCameraModeActive: 0
   stoneController: {fileID: 0}
 --- !u!1001 &431775750
 PrefabInstance:
@@ -24427,6 +24426,7 @@ MonoBehaviour:
   movementBoundsMax: {x: 10, y: 10}
   doubleTapTime: 0.3
   lastTapTime: 0
+  cameraControl: {fileID: 429794675}
 --- !u!135 &2026979716
 SphereCollider:
   m_ObjectHideFlags: 0

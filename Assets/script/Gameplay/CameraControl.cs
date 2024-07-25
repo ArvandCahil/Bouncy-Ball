@@ -11,8 +11,9 @@ public class CameraControl : MonoBehaviour
     [SerializeField] private float maxFOV = 60f;
     [SerializeField] private float mouseMoveThreshold = 1f;
     [SerializeField] private float cameraSensitivity = 300f;
-    [SerializeField] private bool isCameraModeActive = false;
     [SerializeField] private StoneController stoneController;
+
+    public bool isCameraModeActive { get; private set; } = false; 
 
     private bool isCameraMode = false;
     private Vector3 lastMousePosition;
@@ -68,6 +69,8 @@ public class CameraControl : MonoBehaviour
                     freeLookCamera.m_YAxis.Value -= mouseDelta.y * cameraSensitivity * Time.deltaTime / 150f;
                     isCameraModeActive = true;
 
+                    Cursor.visible = false; 
+
                     if (stoneController != null)
                     {
                         stoneController.enabled = false;
@@ -85,6 +88,8 @@ public class CameraControl : MonoBehaviour
                 if (isCameraMode)
                 {
                     isCameraModeActive = false;
+
+                    Cursor.visible = true; 
 
                     if (stoneController != null)
                     {
@@ -111,6 +116,7 @@ public class CameraControl : MonoBehaviour
         freeLookCamera.enabled = active;
         if (active)
         {
+            Cursor.visible = false; 
             if (stoneController != null)
             {
                 stoneController.enabled = false;
@@ -124,6 +130,7 @@ public class CameraControl : MonoBehaviour
         }
         else
         {
+            Cursor.visible = true; 
             if (stoneController != null)
             {
                 stoneController.enabled = true;
