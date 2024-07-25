@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class ToggleSliderController : MonoBehaviour
 {
@@ -16,25 +17,30 @@ public class ToggleSliderController : MonoBehaviour
     {
         if (isMoving)
         {
-            float moveAmount = speed * Time.deltaTime * (moveUp ? 1 : -1);
-            Vector3 newPosition = slider.localPosition + new Vector3(0, moveAmount, 0);
-
             float upperLimit = upperLimitObject.localPosition.y - upperOffset;
 
-            if (newPosition.y > upperLimit)
+            if (moveUp)
             {
-                newPosition.y = upperLimit;
-                isMoving = false;
-                moveUp = false;
+                slider.DOLocalMoveY(upperLimit, Mathf.Abs(upperLimit - slider.localPosition.y) / speed)
+                      .SetEase(Ease.InOutCubic)
+                      .OnComplete(() =>
+                      {
+                          isMoving = false;
+                          moveUp = false;
+                      });
             }
-            else if (newPosition.y < lowerLimit)
+            else
             {
-                newPosition.y = lowerLimit;
-                isMoving = false;
-                moveUp = true;
+                slider.DOLocalMoveY(lowerLimit, Mathf.Abs(lowerLimit - slider.localPosition.y) / speed)
+                      .SetEase(Ease.InOutCubic)
+                      .OnComplete(() =>
+                      {
+                          isMoving = false;
+                          moveUp = true;
+                      });
             }
 
-            slider.localPosition = newPosition;
+            isMoving = false; 
         }
     }
 
