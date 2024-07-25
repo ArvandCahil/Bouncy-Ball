@@ -8,14 +8,6 @@ public class SwitchButton : MonoBehaviour
     public float rotationSpeed = 2f;   
     public float buttonDelay = 0.5f; 
 
-    void Start()
-    {
-        if (refreshButton != null)
-        {
-            refreshButton.onClick.AddListener(StartAnimation);
-        }
-    }
-
     public void StartAnimation()
     {
         refreshButton.interactable = false;
