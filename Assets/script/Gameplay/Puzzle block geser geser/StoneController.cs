@@ -7,6 +7,7 @@ public class StoneController : MonoBehaviour
     [SerializeField] private CameraControl cameraControl; // Referensi ke script CameraControl
 
     [SerializeField] private float moveSpeed = 5f; // Kecepatan pergerakan stone yang dapat diatur dari Inspector
+    [SerializeField] private bool sudahSampai; // Variabel boolean untuk status batas pergerakan yang ter-serialize
 
     private Vector3 offset; // Offset posisi saat drag
     private bool isDragging = false; // Status apakah stone sedang di-drag
@@ -114,6 +115,9 @@ public class StoneController : MonoBehaviour
             // Set target position untuk interpolasi
             targetPosition = newPosition;
             isMoving = true;
+
+            // Update status sudahSampai
+            UpdateSudahSampai();
         }
 
         if (isMoving)
@@ -126,6 +130,41 @@ public class StoneController : MonoBehaviour
             {
                 isMoving = false;
             }
+        }
+    }
+
+    private void UpdateSudahSampai()
+    {
+        Vector3 pipeCenter = currentPipe.GetPipeCenter();
+        float pipeLength = currentPipe.GetPipeLength() / 2;
+
+        bool edgeReached = false;
+
+        if (currentPipe.IsHorizontalX)
+        {
+            edgeReached = Mathf.Abs(transform.position.x - (pipeCenter.x - pipeLength)) < 0.01f ||
+                          Mathf.Abs(transform.position.x - (pipeCenter.x + pipeLength)) < 0.01f;
+        }
+        else if (currentPipe.IsHorizontalZ)
+        {
+            edgeReached = Mathf.Abs(transform.position.z - (pipeCenter.z - pipeLength)) < 0.01f ||
+                          Mathf.Abs(transform.position.z - (pipeCenter.z + pipeLength)) < 0.01f;
+        }
+        else if (currentPipe.IsVertical)
+        {
+            edgeReached = Mathf.Abs(transform.position.y - (pipeCenter.y - pipeLength)) < 0.01f ||
+                          Mathf.Abs(transform.position.y - (pipeCenter.y + pipeLength)) < 0.01f;
+        }
+
+        if (edgeReached)
+        {
+            sudahSampai = false;
+            Debug.Log("Bola sudah sampai"); // Pesan ketika bola menyentuh batas
+        }
+        else
+        {
+            sudahSampai = true;
+            Debug.Log("Bola belum sampai"); // Pesan ketika bola tidak berada di batas
         }
     }
 

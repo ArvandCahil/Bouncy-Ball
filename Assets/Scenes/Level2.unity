@@ -8613,7 +8613,6 @@ MonoBehaviour:
   maxFOV: 60
   mouseMoveThreshold: 1
   cameraSensitivity: 300
-  isCameraModeActive: 0
   stoneController: {fileID: 1704443562}
 --- !u!1001 &431775750
 PrefabInstance:
@@ -9711,7 +9710,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d105000565eaa8347ac03e0feba5ad7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHorizontal: 1
+  isHorizontalX: 1
+  isHorizontalZ: 0
+  isVertical: 0
   manualLength: 4
   centerOffset: {x: -5, y: 0, z: 0}
 --- !u!4 &486794050 stripped
@@ -34318,7 +34319,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8f35caa634276214786d84ed76a2d4dc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8f35caa634276214786d84ed76a2d4dc,
         type: 3}
@@ -37045,6 +37046,7 @@ MonoBehaviour:
   defaultMaterial: {fileID: 2100000, guid: ad1500310b7a8c5489a0ce2046a73543, type: 2}
   cameraControl: {fileID: 429794675}
   moveSpeed: 5
+  sudahSampai: 0
 --- !u!4 &1704939518 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3970715263525982204, guid: 4e0d60c765fbf8f41b5875971a9ff0e0,
