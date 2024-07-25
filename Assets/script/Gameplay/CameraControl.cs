@@ -11,7 +11,7 @@ public class CameraControl : MonoBehaviour
     [SerializeField] private float cameraSensitivity = 300f;
     [SerializeField] private StoneController stoneController;
 
-    public bool isCameraModeActive { get; private set; } = false; 
+    public bool isCameraModeActive { get; private set; } = false;
 
     private bool isCameraMode = false;
     private Vector3 lastMousePosition;

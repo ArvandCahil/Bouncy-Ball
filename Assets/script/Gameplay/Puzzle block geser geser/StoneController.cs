@@ -122,6 +122,9 @@ public class StoneController : MonoBehaviour
         {
             transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
 
+            // Update 'sudahSampai' continuously as the stone approaches the target position
+            UpdateSudahSampai();
+
             if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
             {
                 isMoving = false;
@@ -131,36 +134,46 @@ public class StoneController : MonoBehaviour
 
     private void UpdateSudahSampai()
     {
+        if (currentPipe == null)
+            return;
+
         Vector3 pipeCenter = currentPipe.GetPipeCenter();
         float pipeLength = currentPipe.GetPipeLength() / 2;
 
         bool edgeReached = false;
+        float threshold = 0.05f; // Small threshold value for better precision
 
         if (currentPipe.IsHorizontalX)
         {
-            edgeReached = Mathf.Abs(transform.position.x - (pipeCenter.x - pipeLength)) < 0.01f ||
-                          Mathf.Abs(transform.position.x - (pipeCenter.x + pipeLength)) < 0.01f;
+            edgeReached = Mathf.Abs(transform.position.x - (pipeCenter.x - pipeLength)) < threshold ||
+                          Mathf.Abs(transform.position.x - (pipeCenter.x + pipeLength)) < threshold;
         }
         else if (currentPipe.IsHorizontalZ)
         {
-            edgeReached = Mathf.Abs(transform.position.z - (pipeCenter.z - pipeLength)) < 0.01f ||
-                          Mathf.Abs(transform.position.z - (pipeCenter.z + pipeLength)) < 0.01f;
+            edgeReached = Mathf.Abs(transform.position.z - (pipeCenter.z - pipeLength)) < threshold ||
+                          Mathf.Abs(transform.position.z - (pipeCenter.z + pipeLength)) < threshold;
         }
         else if (currentPipe.IsVertical)
         {
-            edgeReached = Mathf.Abs(transform.position.y - (pipeCenter.y - pipeLength)) < 0.01f ||
-                          Mathf.Abs(transform.position.y - (pipeCenter.y + pipeLength)) < 0.01f;
+            edgeReached = Mathf.Abs(transform.position.y - (pipeCenter.y - pipeLength)) < threshold ||
+                          Mathf.Abs(transform.position.y - (pipeCenter.y + pipeLength)) < threshold;
         }
 
         if (edgeReached)
         {
-            sudahSampai = true;
-            Debug.Log("Bola sudah sampai");
+            if (!sudahSampai)
+            {
+                sudahSampai = true;
+                Debug.Log("Bola sudah sampai");
+            }
         }
         else
         {
-            sudahSampai = false;
-            Debug.Log("Bola belum sampai");
+            if (sudahSampai)
+            {
+                sudahSampai = false;
+                Debug.Log("Bola belum sampai");
+            }
         }
     }
 

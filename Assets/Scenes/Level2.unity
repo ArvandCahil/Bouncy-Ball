@@ -9714,7 +9714,7 @@ MonoBehaviour:
   isHorizontalZ: 0
   isVertical: 0
   manualLength: 4
-  centerOffset: {x: -5, y: 0, z: 0}
+  centerOffset: {x: 0, y: 1, z: 0}
 --- !u!4 &486794050 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8f35caa634276214786d84ed76a2d4dc,
