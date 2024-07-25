@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
@@ -22,31 +20,8 @@ public class CameraControl : MonoBehaviour
     {
         if (freeLookCamera.enabled)
         {
-            float scrollInput = Input.GetAxis("Mouse ScrollWheel");
-            if (scrollInput != 0f)
-            {
-                float currentFOV = freeLookCamera.m_Lens.FieldOfView;
-                float newFOV = Mathf.Clamp(currentFOV - scrollInput * zoomSpeed, minFOV, maxFOV);
-                freeLookCamera.m_Lens.FieldOfView = newFOV;
-            }
-
-            if (Input.touchCount == 2)
-            {
-                Touch touchZero = Input.GetTouch(0);
-                Touch touchOne = Input.GetTouch(1);
-
-                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
-
-                float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-                float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
-
-                float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
-
-                float currentFOV = freeLookCamera.m_Lens.FieldOfView;
-                float newFOV = Mathf.Clamp(currentFOV + deltaMagnitudeDiff * zoomSpeed, minFOV, maxFOV);
-                freeLookCamera.m_Lens.FieldOfView = newFOV;
-            }
+            HandleZoom();
+            HandleTouchInput();
 
             if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
             {
@@ -65,42 +40,14 @@ public class CameraControl : MonoBehaviour
 
                 if (isCameraMode)
                 {
-                    freeLookCamera.m_XAxis.Value += mouseDelta.x * cameraSensitivity * Time.deltaTime;
-                    freeLookCamera.m_YAxis.Value -= mouseDelta.y * cameraSensitivity * Time.deltaTime / 150f;
-                    isCameraModeActive = true;
-
-                    Cursor.visible = false; 
-
-                    if (stoneController != null)
-                    {
-                        stoneController.enabled = false;
-
-                        Collider stoneCollider = stoneController.GetComponent<Collider>();
-                        if (stoneCollider != null)
-                        {
-                            stoneCollider.enabled = false;
-                        }
-                    }
+                    HandleCameraMovement(mouseDelta);
                 }
             }
             else
             {
                 if (isCameraMode)
                 {
-                    isCameraModeActive = false;
-
-                    Cursor.visible = true; 
-
-                    if (stoneController != null)
-                    {
-                        stoneController.enabled = true;
-
-                        Collider stoneCollider = stoneController.GetComponent<Collider>();
-                        if (stoneCollider != null)
-                        {
-                            stoneCollider.enabled = true;
-                        }
-                    }
+                    EndCameraMode();
                 }
 
                 freeLookCamera.m_XAxis.m_MaxSpeed = 0;
@@ -111,12 +58,82 @@ public class CameraControl : MonoBehaviour
         }
     }
 
+    private void HandleZoom()
+    {
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+        if (scrollInput != 0f)
+        {
+            float currentFOV = freeLookCamera.m_Lens.FieldOfView;
+            float newFOV = Mathf.Clamp(currentFOV - scrollInput * zoomSpeed, minFOV, maxFOV);
+            freeLookCamera.m_Lens.FieldOfView = newFOV;
+        }
+    }
+
+    private void HandleTouchInput()
+    {
+        if (Input.touchCount == 2)
+        {
+            Touch touchZero = Input.GetTouch(0);
+            Touch touchOne = Input.GetTouch(1);
+
+            Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+            Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+            float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+            float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+
+            float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+
+            float currentFOV = freeLookCamera.m_Lens.FieldOfView;
+            float newFOV = Mathf.Clamp(currentFOV + deltaMagnitudeDiff * zoomSpeed, minFOV, maxFOV);
+            freeLookCamera.m_Lens.FieldOfView = newFOV;
+        }
+    }
+
+    private void HandleCameraMovement(Vector3 mouseDelta)
+    {
+        freeLookCamera.m_XAxis.Value += mouseDelta.x * cameraSensitivity * Time.deltaTime;
+        freeLookCamera.m_YAxis.Value -= mouseDelta.y * cameraSensitivity * Time.deltaTime / 150f;
+        isCameraModeActive = true;
+
+        Cursor.visible = false;
+
+        if (stoneController != null)
+        {
+            stoneController.enabled = false;
+
+            Collider stoneCollider = stoneController.GetComponent<Collider>();
+            if (stoneCollider != null)
+            {
+                stoneCollider.enabled = false;
+            }
+        }
+    }
+
+    private void EndCameraMode()
+    {
+        isCameraModeActive = false;
+
+        Cursor.visible = true;
+
+        if (stoneController != null)
+        {
+            stoneController.enabled = true;
+
+            Collider stoneCollider = stoneController.GetComponent<Collider>();
+            if (stoneCollider != null)
+            {
+                stoneCollider.enabled = true;
+            }
+        }
+    }
+
     public void SetCameraActive(bool active)
     {
         freeLookCamera.enabled = active;
         if (active)
         {
-            Cursor.visible = false; 
+            Cursor.visible = false;
             if (stoneController != null)
             {
                 stoneController.enabled = false;
@@ -130,7 +147,7 @@ public class CameraControl : MonoBehaviour
         }
         else
         {
-            Cursor.visible = true; 
+            Cursor.visible = true;
             if (stoneController != null)
             {
                 stoneController.enabled = true;

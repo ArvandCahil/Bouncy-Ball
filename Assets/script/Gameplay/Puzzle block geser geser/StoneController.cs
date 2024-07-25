@@ -6,7 +6,7 @@ public class StoneController : MonoBehaviour
     [SerializeField] private Material defaultMaterial;
     [SerializeField] private CameraControl cameraControl;
 
-    [SerializeField] private float moveSpeed = 5f; // Kecepatan pergerakan stone yang dapat diatur dari Inspector
+    [SerializeField] private float moveSpeed = 5f;
 
     private Vector3 offset;
     private bool isDragging = false;
@@ -86,28 +86,34 @@ public class StoneController : MonoBehaviour
             float pipeLength = currentPipe.GetPipeLength() / 2;
 
             Vector3 newPosition;
-            if (currentPipe.IsHorizontal)
+            if (currentPipe.IsHorizontalX)
             {
                 float clampedX = Mathf.Clamp(mousePosition.x, pipeCenter.x - pipeLength, pipeCenter.x + pipeLength);
                 newPosition = new Vector3(clampedX, transform.position.y, transform.position.z);
             }
-            else
+            else if (currentPipe.IsHorizontalZ)
+            {
+                float clampedZ = Mathf.Clamp(mousePosition.z, pipeCenter.z - pipeLength, pipeCenter.z + pipeLength);
+                newPosition = new Vector3(transform.position.x, transform.position.y, clampedZ);
+            }
+            else if (currentPipe.IsVertical)
             {
                 float clampedY = Mathf.Clamp(mousePosition.y, pipeCenter.y - pipeLength, pipeCenter.y + pipeLength);
                 newPosition = new Vector3(transform.position.x, clampedY, transform.position.z);
             }
+            else
+            {
+                return;
+            }
 
-            // Set target position for interpolation
             targetPosition = newPosition;
             isMoving = true;
         }
 
         if (isMoving)
         {
-            // Smoothly move the stone towards the target position
             transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
 
-            // Stop moving when close enough to the target
             if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
             {
                 isMoving = false;
