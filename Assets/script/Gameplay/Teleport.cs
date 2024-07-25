@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Tp : MonoBehaviour
+public class Teleport : MonoBehaviour
 {
     public int tpId;
     private GameObject ball;
@@ -18,7 +18,7 @@ public class Tp : MonoBehaviour
         //});
     }
 
-    public void Teleport(Action callback)
+    public void Teleports(Action callback)
     {
         StartCoroutine(TeleportCoroutine(callback));
     }
@@ -30,7 +30,7 @@ public class Tp : MonoBehaviour
         foreach (GameObject tp2 in tp)
         {
             
-            if (tp2 != this.gameObject && tpId == tp2.GetComponent<Tp>().tpId)
+            if (tp2 != this.gameObject && tpId == tp2.GetComponent<Teleport>().tpId)
             {
 
                 ball.transform.position = new Vector3(tp2.transform.position.x, tp2.transform.position.y + 1, tp2.transform.position.z);
