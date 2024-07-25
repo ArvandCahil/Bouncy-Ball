@@ -60,11 +60,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\script\UI\Main Menu\Node.cs" />
+    <Compile Include="Assets\script\Gameplay\Tp.cs" />
     <Compile Include="Assets\script\Gameplay\Coin\ScoreManager.cs" />
     <Compile Include="Assets\script\Environment\Main Menu\Post Process Manipulation.cs" />
     <Compile Include="Assets\script\Data Structure\Data Structure.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\script\Gameplay\Coin\CoinAnimation.cs" />
+    <Compile Include="Assets\script\UI\Main Menu\SwitchButton.cs" />
     <Compile Include="Assets\script\UI\Main Menu\Volume Setting.cs" />
     <Compile Include="Assets\script\Gameplay\Ball Rotation.cs" />
     <Compile Include="Assets\script\UI\Main Menu\SplashScreenController.cs" />
@@ -74,10 +76,12 @@
     <Compile Include="Assets\script\Environment\Main Menu\Skybox Rotator.cs" />
     <Compile Include="Assets\script\UI\Main Menu\Labeller.cs" />
     <Compile Include="Assets\script\Gameplay\Puzzle block geser geser\PipeController.cs" />
+    <Compile Include="Assets\script\UI\Main Menu\ToggleSliderController.cs" />
     <Compile Include="Assets\script\UI\Main Menu\MenuController.cs" />
     <Compile Include="Assets\script\Gameplay\UnitController.cs" />
     <Compile Include="Assets\script\Gameplay\BallMovementController.cs" />
     <Compile Include="Assets\script\UI\Main Menu\Tile.cs" />
+    <Compile Include="Assets\script\UI\Main Menu\MoveMode.cs" />
     <Compile Include="Assets\script\UI\Main Menu\Navigation Bar.cs" />
     <Compile Include="Assets\script\Gameplay\CameraZoom.cs" />
     <Compile Include="Assets\script\Game Manager\General Manager.cs" />

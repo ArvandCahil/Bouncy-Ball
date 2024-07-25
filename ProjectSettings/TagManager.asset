@@ -8,6 +8,9 @@ TagManager:
   - unit
   - Star
   - Post Process
+  - Post Process 1
+  - tp
+  - target
   layers:
   - Default
   - TransparentFX
