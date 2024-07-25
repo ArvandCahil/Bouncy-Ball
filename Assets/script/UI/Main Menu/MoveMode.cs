@@ -20,16 +20,20 @@ public class MoveMode : MonoBehaviour
     private int clickCount = 0;
 
     void Start()
-    {   
-        targetPosition1 = new Vector3(0, 361f, 0);
-        targetPosition2 = new Vector3(0, 301f, 0);
-        secondTargetPosition1 = new Vector3(215f, 246f, 0);
-        secondTargetPosition2 = new Vector3(0, 361f, 0);
-        moveAfterTeleportPositionObject1 = new Vector3(215f, 301f, 0); 
-        moveAfterTeleportPositionObject2 = new Vector3(215f, 301f, 0); 
+    {
+        
+        button.onClick.AddListener(OnButtonPress);
+
+        
+        targetPosition1 = new Vector3(0, 1075f, 0);
+        targetPosition2 = new Vector3(0, 905f, 0);
+        secondTargetPosition1 = new Vector3(640f, 735f, 0);
+        secondTargetPosition2 = new Vector3(0, 1075f, 0);
+        moveAfterTeleportPositionObject1 = new Vector3(640f, 905f, 0); 
+        moveAfterTeleportPositionObject2 = new Vector3(640f, 905f, 0); 
     }
 
-    public void OnButtonPress()
+    void OnButtonPress()
     {
         
         if (clickCount == 0)
@@ -51,7 +55,7 @@ public class MoveMode : MonoBehaviour
         {
             
             DOTween.Sequence()
-                .Append(object2.transform.DOMove(new Vector3(215f, 246f, 0), 0f)) 
+                .Append(object2.transform.DOMove(new Vector3(645f, 735f, 0), 0f)) 
                 .Append(object2.transform.DOMove(moveAfterTeleportPositionObject2, moveDuration).SetEase(easeType))
                 .Play();
 

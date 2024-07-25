@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using UnityEngine.Rendering.Universal;
+using TMPro;
 using UnityEngine.Rendering;
 
 public class NavigationBar : MonoBehaviour
@@ -34,8 +34,7 @@ public class NavigationBar : MonoBehaviour
     private Camera mainCamera;
     private Camera overlayCamera;
     private Volume EnvironmentVolume;
-    private DepthOfField envDOF;
-    private ColorAdjustments ca;
+    private Volume BallVolume;
 
     private void Start()
     {
@@ -73,9 +72,18 @@ public class NavigationBar : MonoBehaviour
             Debug.LogError("Overlay camera not found in the camera stack!");
         }
 
-        EnvironmentVolume = GameObject.FindGameObjectWithTag("Post Process").GetComponent<Volume>();
-        EnvironmentVolume.profile.TryGet(out envDOF);
-        EnvironmentVolume.profile.TryGet(out ca);
+        GameObject[] cache = GameObject.FindGameObjectsWithTag("Post Processing");
+        foreach (GameObject p in cache)
+        {
+            if (gameObject.layer.Equals("Post Processing"))
+            {
+                EnvironmentVolume = p.GetComponent<Volume>();
+            }
+            else if (gameObject.layer.Equals("Post Processing 1"))
+            {
+                BallVolume = p.GetComponent<Volume>();
+            }
+        }
 
         if (playObject != null)
         {
@@ -85,6 +93,7 @@ public class NavigationBar : MonoBehaviour
         if (slideObject != null)
         {
             slideInitialPosition = slideObject.transform.position;
+            Debug.Log("SlideObject Initial Position: " + slideInitialPosition);
         }
 
         setState(State.home);
@@ -125,19 +134,76 @@ public class NavigationBar : MonoBehaviour
     {
         if (playObject != null)
         {
-            RectTransform playRectTransform = playObject.GetComponent<RectTransform>();
-            Vector2 targetPosition = targetState == State.home ? new Vector2(0, 1168.5f) : new Vector2(0, 316f);
-            playRectTransform.DOAnchorPos(targetPosition, 0.5f).SetEase(Ease.InOutCubic);
+            if (targetState == State.home)
+            {
+                StartCoroutine(MovePlayObject(new Vector2(0, 1168.5f), true)); 
+            }
+            else
+            {
+                StartCoroutine(MovePlayObject(new Vector2(0, 316f), false)); 
+            }
         }
+    }
+
+    private IEnumerator MovePlayObject(Vector2 targetPosition, bool activate)
+    {
+        RectTransform playRectTransform = playObject.GetComponent<RectTransform>();
+        Vector2 startPosition = playRectTransform.anchoredPosition;
+        Vector2 endPosition = activate ? new Vector2(playRectTransform.anchoredPosition.x, 1168.5f) : new Vector2(playRectTransform.anchoredPosition.x, 78f);
+        float duration = 0.5f;
+        float elapsedTime = 0;
+
+        if (activate)
+        {
+            playObject.SetActive(true);
+        }
+
+        while (elapsedTime < duration)
+        {
+            playRectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        playRectTransform.anchoredPosition = endPosition;
     }
 
     private void UpdateSlideObject(State targetState)
     {
         if (slideObject != null)
         {
-            Vector2 targetPosition = targetState == State.inventory ? new Vector2(0, -660f) : new Vector2(0, -1218f);
-            slideObject.transform.DOLocalMoveY(targetPosition.y, 0.5f).SetEase(Ease.InOutCubic);
+            if (targetState == State.inventory)
+            {
+                StartCoroutine(MoveSlideObject(new Vector2(0, -660f), true));
+            }
+            else
+            {
+                StartCoroutine(MoveSlideObject(new Vector2(0, -1218f), false));
+            }
         }
+    }
+
+    private IEnumerator MoveSlideObject(Vector2 targetPosition, bool activate)
+    {
+        RectTransform slideRectTransform = slideObject.GetComponent<RectTransform>();
+        Vector2 startPosition = slideRectTransform.anchoredPosition;
+        Vector2 endPosition = activate ? targetPosition : new Vector2(slideRectTransform.anchoredPosition.x, -1218f);
+        float duration = 0.5f;
+        float elapsedTime = 0;
+
+        if (activate)
+        {
+            slideObject.SetActive(true);
+        }
+
+        while (elapsedTime < duration)
+        {
+            slideRectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        slideRectTransform.anchoredPosition = endPosition;
     }
 
     private void UpdateCameraEffect(State targetState)
@@ -145,24 +211,16 @@ public class NavigationBar : MonoBehaviour
         if (mainCamera != null && overlayCamera != null)
         {
             float targetFOV = 60f;
-            float startFocusDistance = 17.4f;
             if (targetState == State.inventory)
             {
-                DOTween.To(() => envDOF.focusDistance.value, x => envDOF.focusDistance.value = x, 8f, 1f).SetEase(Ease.InOutCubic);
-                DOTween.To(() => ca.saturation.value, x => ca.saturation.value = x, -100f, 1f).SetEase(Ease.InOutCubic);
                 targetFOV = 30f;
-
             }
             else if (targetState == State.shop)
             {
-                DOTween.To(() => envDOF.focusDistance.value, x => envDOF.focusDistance.value = x, 17.4f, 0.5f).SetEase(Ease.InOutCubic);
-                DOTween.To(() => ca.saturation.value, x => ca.saturation.value = x, 0f, 1f).SetEase(Ease.InOutCubic);
                 targetFOV = 90f;
             }
             else if (targetState == State.home)
             {
-                DOTween.To(() => envDOF.focusDistance.value, x => envDOF.focusDistance.value = x, 17.4f, 0.5f).SetEase(Ease.InOutCubic);
-                DOTween.To(() => ca.saturation.value, x => ca.saturation.value = x, 0f, 1f).SetEase(Ease.InOutCubic);
                 targetFOV = 60f;
             }
 

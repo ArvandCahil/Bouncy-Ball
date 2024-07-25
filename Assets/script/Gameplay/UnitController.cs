@@ -6,23 +6,23 @@ using UnityEngine;
 public class UnitController : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 1f;
-    [SerializeField] int maxMoves;
+    [SerializeField] int maxMoves; 
 
     [SerializeField] Vector2Int movementBoundsMin = new Vector2Int(-10, -10);
     [SerializeField] Vector2Int movementBoundsMax = new Vector2Int(10, 10);
 
     Transform selectedUnit;
     bool unitSelected = false;
-    private GameObject currentTile;
 
     List<Node> path = new List<Node>();
 
     GridManager gridManager;
     Pathfinding pathFinder;
-    Teleport tp;
 
     int moveCount = 0;
-
+    [SerializeField] float doubleTapTime = 0.3f;
+    [SerializeField] float lastTapTime = 0f;
+    private bool isDoubleTap = false;
 
     void Start()
     {
@@ -31,6 +31,16 @@ public class UnitController : MonoBehaviour
         Debug.Log($"Max Moves: {maxMoves}");
         Debug.Log(gameObject.name);
 
+        float currentTime = Time.time;
+        if (currentTime - lastTapTime < doubleTapTime)
+        {
+            isDoubleTap = true;
+        }
+        else
+        {
+            isDoubleTap = false;
+        }
+        lastTapTime = currentTime;
     }
 
     // Update is called once per frame
@@ -60,12 +70,24 @@ public class UnitController : MonoBehaviour
 
             if (hasHit)
             {
-                if (hit.transform.CompareTag("tile") || hit.transform.CompareTag("tp"))
+                if (hit.transform.CompareTag("tile") || hit.transform.CompareTag("tp") || hit.transform.CompareTag("target"))
                 {
+                    if (unitSelected && hit.transform.CompareTag("tp"))
+                    {
+                        GameObject targetObject = GameObject.FindGameObjectWithTag("target");
+                        if (targetObject != null)
+                        {
+                            selectedUnit.transform.position = new Vector3(targetObject.transform.position.x, targetObject.transform.position.y + 1, targetObject.transform.position.z);
+                            Debug.Log("Unit teleported to target position.");
+                        }
+                        else
+                        {
+                            Debug.Log("Target object not found.");
+                        }
+                    }
                     if (unitSelected)
                     {
                         Vector2Int targetCords = hit.transform.GetComponent<Tile>().cords;
-                        currentTile = hit.transform.gameObject;
                         Vector2Int startCords = new Vector2Int((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.z) / gridManager.UnityGridSize;
 
 
@@ -114,8 +136,6 @@ public class UnitController : MonoBehaviour
         path.Clear();
         path = pathFinder.GetNewPath(coordinates);
         StartCoroutine(FollowPath());
-
-
     }
 
     IEnumerator FollowPath()
@@ -140,15 +160,6 @@ public class UnitController : MonoBehaviour
 
             Debug.Log(endPosition);
         }
-        try
-        {
-            Teleport tp = currentTile.GetComponent<Teleport>();
-            tp.Teleports(() =>
-            {
-                Debug.Log("Teleportation complete. Callback executed in a different script.");
-            });
-        } catch { Debug.Log("Tp habis"); }
-
     }
 
     bool IsWithinBounds(Vector2Int position)
