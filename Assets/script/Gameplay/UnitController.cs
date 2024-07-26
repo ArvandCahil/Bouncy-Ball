@@ -60,7 +60,7 @@ public class UnitController : MonoBehaviour
 
             if (hasHit)
             {
-                if (hit.transform.CompareTag("tile") || hit.transform.CompareTag("tp"))
+                if (hit.transform.CompareTag("tile") || hit.transform.CompareTag("tp") || hit.transform.CompareTag("geser") )
                 {
                     if (unitSelected)
                     {

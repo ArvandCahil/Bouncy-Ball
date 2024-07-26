@@ -177,6 +177,9 @@ public class StoneController : MonoBehaviour
         }
     }
 
+
+
+
     private Vector3 GetMouseWorldPosition()
     {
         Vector3 mousePoint = Input.mousePosition;
