@@ -27,7 +27,7 @@ public class StoneController : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (cameraControl != null && !isDragging)
+        if (!isDragging && cameraControl != null)
         {
             cameraControl.SetCameraActive(false);
         }
