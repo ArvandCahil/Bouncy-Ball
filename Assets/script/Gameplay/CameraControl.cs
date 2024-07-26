@@ -11,8 +11,6 @@ public class CameraControl : MonoBehaviour
     [SerializeField] private float cameraSensitivity = 300f;
     [SerializeField] private StoneController stoneController;
 
-    public bool isCameraModeActive { get; private set; } = false;
-
     private bool isCameraMode = false;
     private Vector3 lastMousePosition;
 
@@ -50,7 +48,6 @@ public class CameraControl : MonoBehaviour
                     EndCameraMode();
                 }
 
-                // Nonaktifkan pergerakan kamera saat mode kamera selesai
                 freeLookCamera.m_XAxis.m_MaxSpeed = 0;
                 freeLookCamera.m_YAxis.m_MaxSpeed = 0;
             }
@@ -95,15 +92,11 @@ public class CameraControl : MonoBehaviour
     {
         freeLookCamera.m_XAxis.Value += mouseDelta.x * cameraSensitivity * Time.deltaTime;
         freeLookCamera.m_YAxis.Value -= mouseDelta.y * cameraSensitivity * Time.deltaTime / 150f;
-        isCameraModeActive = true;
 
-        // Sembunyikan cursor saat mode kamera aktif
-        Cursor.visible = false;
-
-        // Nonaktifkan StoneController dan collider-nya saat mode kamera aktif
         if (stoneController != null)
         {
             stoneController.enabled = false;
+
             Collider stoneCollider = stoneController.GetComponent<Collider>();
             if (stoneCollider != null)
             {
@@ -114,15 +107,10 @@ public class CameraControl : MonoBehaviour
 
     private void EndCameraMode()
     {
-        isCameraModeActive = false;
-
-        // Tampilkan cursor saat mode kamera selesai
-        Cursor.visible = true;
-
-        // Aktifkan StoneController dan collider-nya
         if (stoneController != null)
         {
             stoneController.enabled = true;
+
             Collider stoneCollider = stoneController.GetComponent<Collider>();
             if (stoneCollider != null)
             {
@@ -136,11 +124,10 @@ public class CameraControl : MonoBehaviour
         freeLookCamera.enabled = active;
         if (active)
         {
-            // Sembunyikan cursor saat kamera aktif
-            Cursor.visible = false;
             if (stoneController != null)
             {
                 stoneController.enabled = false;
+
                 Collider stoneCollider = stoneController.GetComponent<Collider>();
                 if (stoneCollider != null)
                 {
@@ -150,11 +137,10 @@ public class CameraControl : MonoBehaviour
         }
         else
         {
-            // Tampilkan cursor saat kamera tidak aktif
-            Cursor.visible = true;
             if (stoneController != null)
             {
                 stoneController.enabled = true;
+
                 Collider stoneCollider = stoneController.GetComponent<Collider>();
                 if (stoneCollider != null)
                 {
