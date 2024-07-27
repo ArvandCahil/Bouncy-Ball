@@ -18378,6 +18378,25 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e0d60c765fbf8f41b5875971a9ff0e0, type: 3}
+--- !u!1 &1585357514 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2667987487746653253, guid: d4cffccd323f62949887e6473155a848,
+    type: 3}
+  m_PrefabInstance: {fileID: 7491594381818822687}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1585357515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585357514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02605071738751a41849fb8faf99638f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 2026979714}
 --- !u!1001 &1586299337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25596,6 +25615,10 @@ MonoBehaviour:
   maxMoves: 10
   movementBoundsMin: {x: -10, y: -10}
   movementBoundsMax: {x: 10, y: 10}
+  grass: {fileID: 0}
+  moveCount: 0
+  textRemainingMoves: {fileID: 1414162378}
+  panelGameOver: {fileID: 0}
 --- !u!135 &2026979716
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -27392,7 +27415,11 @@ PrefabInstance:
     - {fileID: 4535984359615070015, guid: d4cffccd323f62949887e6473155a848, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2667987487746653253, guid: d4cffccd323f62949887e6473155a848,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1585357515}
   m_SourcePrefab: {fileID: 100100000, guid: d4cffccd323f62949887e6473155a848, type: 3}
 --- !u!1001 &7884469019082328314
 PrefabInstance:
