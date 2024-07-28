@@ -20,7 +20,7 @@ public class Pathfinding : MonoBehaviour
     GridManager gridManager;
     Dictionary<Vector2Int, Node> grid = new Dictionary<Vector2Int, Node>();
 
-    Vector2Int[] searchOrder = {Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down};
+    Vector2Int[] searchOrder = { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left};
 
 
     private void Awake()

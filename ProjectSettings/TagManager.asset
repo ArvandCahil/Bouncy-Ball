@@ -11,6 +11,7 @@ TagManager:
   - Post Process 1
   - tp
   - target
+  - Finish Tile
   layers:
   - Default
   - TransparentFX
