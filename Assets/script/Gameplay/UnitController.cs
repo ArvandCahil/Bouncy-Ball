@@ -1,12 +1,13 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UnitController : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 1f;
-    [SerializeField] int maxMoves;
+    [SerializeField] public int maxMoves;
 
     [SerializeField] Vector2Int movementBoundsMin = new Vector2Int(-10, -10);
     [SerializeField] Vector2Int movementBoundsMax = new Vector2Int(10, 10);
@@ -17,12 +18,17 @@ public class UnitController : MonoBehaviour
 
     List<Node> path = new List<Node>();
 
+    public GameObject grass;
+
     GridManager gridManager;
     Pathfinding pathFinder;
     Teleport tp;
 
-    int moveCount = 0;
+    public int moveCount = 0;
+    public TextMeshProUGUI textRemainingMoves;
+    int remainingMoves;
 
+    public GameObject panelGameOver;
 
     void Start()
     {
@@ -30,13 +36,19 @@ public class UnitController : MonoBehaviour
         pathFinder = FindObjectOfType<Pathfinding>();
         Debug.Log($"Max Moves: {maxMoves}");
         Debug.Log(gameObject.name);
-
+        updateText();
     }
 
     // Update is called once per frame
     void Update()
     {
         RaycastFunc();
+        if (moveCount > maxMoves)
+        {
+            moveCount = maxMoves;        }
+        else
+        { 
+        }
     }
 
     public void RaycastFunc()
@@ -67,7 +79,7 @@ public class UnitController : MonoBehaviour
                         Vector2Int targetCords = hit.transform.GetComponent<Tile>().cords;
                         currentTile = hit.transform.gameObject;
                         Vector2Int startCords = new Vector2Int((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.z) / gridManager.UnityGridSize;
-
+                        
 
                         if (IsWithinBounds(targetCords))
                         {
@@ -155,5 +167,12 @@ public class UnitController : MonoBehaviour
     {
         return position.x >= movementBoundsMin.x && position.x <= movementBoundsMax.x &&
                position.y >= movementBoundsMin.y && position.y <= movementBoundsMax.y;
+    }
+
+    public void updateText()
+    {
+        remainingMoves = maxMoves - moveCount;
+        textRemainingMoves.text = remainingMoves.ToString();
+        Debug.Log("Max Moves HUD text should be updated. Remaining moves : " + remainingMoves);
     }
 }
