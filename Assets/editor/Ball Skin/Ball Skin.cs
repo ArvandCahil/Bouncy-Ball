@@ -59,7 +59,9 @@ public class SkinEditor : EditorWindow
 
         if (GUILayout.Button("Add New Skin", GUILayout.Height(30)))
         {
-            skinInfo.skins.Add(new skin());
+            skin newSkin = new skin();
+            newSkin.ID = GenerateUniqueID();
+            skinInfo.skins.Add(newSkin);
         }
 
         EditorGUILayout.Space();
@@ -124,5 +126,11 @@ public class SkinEditor : EditorWindow
 
         serializedObject = new SerializedObject(this);
         serializedProperty = serializedObject.FindProperty("skinInfo");
+    }
+
+    private int GenerateUniqueID()
+    {
+        // Generate a unique ID based on current time ticks.
+        return (int)System.DateTime.Now.Ticks;
     }
 }
