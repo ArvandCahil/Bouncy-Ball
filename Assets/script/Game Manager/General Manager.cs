@@ -6,11 +6,12 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class generalManager : MonoBehaviour
 {
     public static generalManager instance;
-    private playerInformation playerInformation;
+    public playerInformation playerInformation;
 
     void Awake()
     {
@@ -145,9 +146,10 @@ public class generalManager : MonoBehaviour
     {
         public static void save()
         {
-            string json = JsonUtility.ToJson(instance.playerInformation);
+            string json = JsonUtility.ToJson(generalManager.instance.playerInformation);
             string path = Application.persistentDataPath + "/data.json";
             File.WriteAllText(path, json);
+            Debug.Log(path);
         }
         public static void load() 
         {

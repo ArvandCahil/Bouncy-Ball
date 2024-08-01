@@ -135,9 +135,23 @@ public class NavigationBar : MonoBehaviour
 
     private void UpdateSlideObject(State targetState)
     {
-        if (slideObject != null && (targetState == State.inventory || targetState == State.home))
+        if (slideObject != null)
         {
-            Vector2 targetPosition = targetState == State.inventory ? new Vector2(0, -660f) : new Vector2(0, -1218f);
+            Vector2 targetPosition = Vector2.zero;
+
+            switch (targetState)
+            {
+                case State.inventory:
+                    targetPosition = new Vector2(0, -660f);
+                    break;
+                case State.home:
+                    targetPosition = new Vector2(0, -1218f);
+                    break;
+                case State.shop:
+                    targetPosition = new Vector2(0, -1218f); // Adjust this position if needed
+                    break;
+            }
+
             slideObject.transform.DOLocalMoveY(targetPosition.y, 0.5f).SetEase(Ease.InOutCubic);
         }
 
@@ -146,15 +160,22 @@ public class NavigationBar : MonoBehaviour
             if (targetState == State.shop)
             {
                 shopOverlay.DOFade(1f, 0.5f).SetEase(Ease.InOutCubic);
-                shopContainer.DOLocalMove(new Vector3(0f, -338.9084f, 0f), 0.5f).SetEase(Ease.InOutCubic);
+                shopContainer.DOLocalMove(new Vector3(0f, -338.9084f, 0f), 0.5f).SetEase(Ease.InOutCubic).OnStart(() =>
+                {
+                    shopOverlay.blocksRaycasts = true;
+                });
             }
             else
             {
-                shopOverlay.DOFade(0f, 0.5f).SetEase(Ease.InOutCubic);
+                shopOverlay.DOFade(0f, 0.5f).SetEase(Ease.InOutCubic).OnStart(() =>
+                {
+                    shopOverlay.blocksRaycasts = false;
+                });
                 shopContainer.DOLocalMove(new Vector3(0f, 0f, 0f), 0.5f).SetEase(Ease.InOutCubic);
             }
         }
     }
+
 
 
     private void UpdateCameraEffect(State targetState)

@@ -44,6 +44,7 @@ public class skin
     public string name;
     public string description;
     public int ID;
+    public int price;
     public Image ballImage;
     public Material material;
 }

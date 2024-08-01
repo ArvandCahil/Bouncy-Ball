@@ -63,17 +63,18 @@
     <Compile Include="Assets\script\UI\Main Menu\Node.cs" />
     <Compile Include="Assets\Pause.cs" />
     <Compile Include="Assets\script\UI\Main Menu\SettingPopUp.cs" />
+    <Compile Include="Assets\script\UI\Scroll Item Effect.cs" />
     <Compile Include="Assets\script\Gameplay\Coin\ScoreManager.cs" />
     <Compile Include="Assets\script\UI\Main Menu\ToggleSwitch.cs" />
     <Compile Include="Assets\script\Environment\Main Menu\Post Process Manipulation.cs" />
     <Compile Include="Assets\script\Data Structure\Data Structure.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\script\Gameplay\Coin\CoinAnimation.cs" />
+    <Compile Include="Assets\script\UI\Shop Card Information.cs" />
     <Compile Include="Assets\script\UI\Main Menu\SwitchButton.cs" />
     <Compile Include="Assets\script\UI\Main Menu\Volume Setting.cs" />
     <Compile Include="Assets\script\Gameplay\Ball Rotation.cs" />
     <Compile Include="Assets\script\UI\Main Menu\SplashScreenController.cs" />
-    <Compile Include="Assets\script\Game Manager\Ball Manager.cs" />
     <Compile Include="Assets\script\Gameplay\CameraControl.cs" />
     <Compile Include="Assets\script\UI\Navigator.cs" />
     <Compile Include="Assets\script\UI\Shop UI.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Assets\script\UI\Main Menu\MoveMode.cs" />
     <Compile Include="Assets\script\UI\Main Menu\Navigation Bar.cs" />
     <Compile Include="Assets\script\Gameplay\CameraZoom.cs" />
+    <Compile Include="Assets\script\Game Manager\Skin Manager.cs" />
     <Compile Include="Assets\script\Game Manager\General Manager.cs" />
     <Compile Include="Assets\script\UI\Main Menu\SplashTranstitiom.cs" />
     <Compile Include="Assets\script\UI\Main Menu\BallPreviewSpawner.cs" />

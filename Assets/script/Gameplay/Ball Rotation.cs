@@ -6,7 +6,6 @@ public class BallRotation : MonoBehaviour
 {
     private float torqueMultiplier = 0.005f;
     private Rigidbody rb;
-    public UnitController controller;
     private bool canMove = true; 
 
     void Start()
@@ -17,26 +16,10 @@ public class BallRotation : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-
-        // Get the contact point of the collision
-        ContactPoint contact = collision.contacts[0];
-
-        if (controller.moveCount < controller.maxMoves)
-        {
-            controller.moveCount++;
-            controller.updateText();
-        }
-        else
-        {
-            Debug.Log("Max moves reached.");
-            canMove = false;
-        }
-
-        if (canMove)
+        if (true)
         {
             ApplyTorque(collision);
         }
-        Debug.Log("Can move: " + canMove);
     }
 
     void OnCollisionStay(Collision collision)
