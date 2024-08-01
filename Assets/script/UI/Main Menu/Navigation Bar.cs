@@ -27,6 +27,8 @@ public class NavigationBar : MonoBehaviour
     [SerializeField] private GameObject inventoryObject;
     [SerializeField] private GameObject playObject;
     [SerializeField] private GameObject slideObject;
+    [SerializeField] private CanvasGroup shopOverlay;
+    [SerializeField] private Transform shopContainer;
 
     private Vector3 playInitialPosition;
     private Vector3 slideInitialPosition;
@@ -133,12 +135,27 @@ public class NavigationBar : MonoBehaviour
 
     private void UpdateSlideObject(State targetState)
     {
-        if (slideObject != null)
+        if (slideObject != null && (targetState == State.inventory || targetState == State.home))
         {
             Vector2 targetPosition = targetState == State.inventory ? new Vector2(0, -660f) : new Vector2(0, -1218f);
             slideObject.transform.DOLocalMoveY(targetPosition.y, 0.5f).SetEase(Ease.InOutCubic);
         }
+
+        if (shopContainer != null && shopOverlay != null)
+        {
+            if (targetState == State.shop)
+            {
+                shopOverlay.DOFade(1f, 0.5f).SetEase(Ease.InOutCubic);
+                shopContainer.DOLocalMove(new Vector3(0f, -338.9084f, 0f), 0.5f).SetEase(Ease.InOutCubic);
+            }
+            else
+            {
+                shopOverlay.DOFade(0f, 0.5f).SetEase(Ease.InOutCubic);
+                shopContainer.DOLocalMove(new Vector3(0f, 0f, 0f), 0.5f).SetEase(Ease.InOutCubic);
+            }
+        }
     }
+
 
     private void UpdateCameraEffect(State targetState)
     {
