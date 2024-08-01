@@ -74,19 +74,20 @@ public class generalManager : MonoBehaviour
     {
         public static class skin
         {
-            public static bool addItem(int id)
+            public static void addItem(int id)
             {
-                if (!instance.playerInformation.inventory.ownedSkinID.Contains(id))
-                {
-                    instance.playerInformation.inventory.ownedSkinID.Append(id);
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                int[] currentArray = instance.playerInformation.inventory.ownedSkinID;
 
+                int newSize = currentArray.Length + 1;
+                int[] newArray = new int[newSize];
+
+                Array.Copy(currentArray, newArray, currentArray.Length);
+
+                newArray[newSize - 1] = id;
+
+                instance.playerInformation.inventory.ownedSkinID = newArray;
             }
+
 
             public static bool removeItem(int id)
             {
@@ -149,7 +150,6 @@ public class generalManager : MonoBehaviour
             string json = JsonUtility.ToJson(generalManager.instance.playerInformation);
             string path = Application.persistentDataPath + "/data.json";
             File.WriteAllText(path, json);
-            Debug.Log(path);
         }
         public static void load() 
         {
