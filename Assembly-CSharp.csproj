@@ -67,6 +67,8 @@
     <Compile Include="Assets\script\Gameplay\Coin\ScoreManager.cs" />
     <Compile Include="Assets\script\UI\Main Menu\ToggleSwitch.cs" />
     <Compile Include="Assets\script\Environment\Main Menu\Post Process Manipulation.cs" />
+    <Compile Include="Assets\script\UI\Inventory Card Information.cs" />
+    <Compile Include="Assets\script\UI\Inventory UI.cs" />
     <Compile Include="Assets\script\Data Structure\Data Structure.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\script\Gameplay\Coin\CoinAnimation.cs" />
